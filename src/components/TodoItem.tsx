@@ -8,7 +8,7 @@ interface IProps {
   todoText: string;
 }
 
-const Todo: FunctionComponent<IProps> = ({ todoText }) => {
+const TodoItem: FunctionComponent<IProps> = ({ todoText }) => {
   const [isDone, setIsDone] = useState(false);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,4 +36,4 @@ const Todo: FunctionComponent<IProps> = ({ todoText }) => {
   );
 };
 
-export default Todo;
+export default TodoItem;
