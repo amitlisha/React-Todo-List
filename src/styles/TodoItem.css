@@ -1,0 +1,7 @@
+.todo-item:hover .delete-button {
+  display: block;
+}
+
+.todo-item .delete-button {
+  display: none;
+}

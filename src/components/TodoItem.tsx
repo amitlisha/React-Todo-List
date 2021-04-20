@@ -7,6 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import React, { FunctionComponent, useState } from "react";
 import Todo from "../models/Todo";
+import "../styles/TodoItem.css";
 
 interface IProps {
   todo: Todo;
@@ -25,7 +26,7 @@ const TodoItem: FunctionComponent<IProps> = ({ todo, onDelete }) => {
   };
 
   return (
-    <div>
+    <div className="todo-item">
       <ListItem dense button divider>
         <ListItemIcon>
           <Checkbox
@@ -41,7 +42,12 @@ const TodoItem: FunctionComponent<IProps> = ({ todo, onDelete }) => {
           primary={todo.text}
         />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="delete" onClick={handleTodoDelete}>
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={handleTodoDelete}
+            className="delete-button"
+          >
             <DeleteForeverIcon />
           </IconButton>
         </ListItemSecondaryAction>
