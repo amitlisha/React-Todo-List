@@ -10,7 +10,7 @@ const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
   const [inputText, setInputText] = useState("");
 
   const handleInputSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 13) {
+    if (event.key === "Enter") {
       onSubmit(inputText);
       setInputText("");
     }
