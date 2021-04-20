@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState<string>("");
 
   const handleInputSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -21,15 +21,13 @@ const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
   };
 
   return (
-    <div>
-      <TextField
-        label="What needs to be done?"
-        value={inputText}
-        variant="outlined"
-        onChange={handleInputChange}
-        onKeyDown={handleInputSubmit}
-      />
-    </div>
+    <TextField
+      label="What needs to be done?"
+      value={inputText}
+      variant="outlined"
+      onChange={handleInputChange}
+      onKeyDown={handleInputSubmit}
+    />
   );
 };
 
