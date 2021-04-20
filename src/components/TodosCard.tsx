@@ -11,14 +11,18 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
-  const handleTodoSubmit = (todoText: string) => {
+  const getNumberOfUncompletedTodos = (): number => {
+    return todos.filter((todo) => todo.isCompleted).length;
+  };
+
+  const handleTodoSubmit = (todoText: string): void => {
     setTodos((oldArray) => [
       ...oldArray,
       new Todo({ text: todoText, isCompleted: false }),
     ]);
   };
 
-  const handleTodoDelete = (todoToDelete: Todo) => {
+  const handleTodoDelete = (todoToDelete: Todo): void => {
     setTodos((oldArray) =>
       oldArray.filter((currTodo) => currTodo != todoToDelete)
     );
