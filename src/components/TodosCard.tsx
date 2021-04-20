@@ -24,6 +24,8 @@ const TodosCard: FunctionComponent<IProps> = () => {
     );
   };
 
+  const updateTodo = (updatedTodo: Todo) => {};
+
   return (
     <div>
       <Box m="auto" width="30%">
