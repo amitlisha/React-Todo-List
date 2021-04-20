@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useState } from "react";
 import TodoInput from "./TodoInput";
-import Paper from "@material-ui/core/Paper";
+import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
 import Todo from "../models/Todo";
 import List from "@material-ui/core/List";
+import CardActions from "@material-ui/core/CardActions";
 
 interface IProps {}
 
@@ -12,7 +13,8 @@ const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
   const getNumberOfUncompletedTodos = (): number => {
-    return todos.filter((todo) => todo.isCompleted).length;
+    debugger;
+    return todos.filter((todo) => !todo.isCompleted).length;
   };
 
   const handleTodoSubmit = (todoText: string): void => {
@@ -31,14 +33,15 @@ const TodosCard: FunctionComponent<IProps> = () => {
   return (
     <div>
       <Box m="auto" width="30%">
-        <Paper>
+        <Card>
           <TodoInput onSubmit={handleTodoSubmit}></TodoInput>
           <List>
             {todos.map((currTodo) => (
               <TodoItem todo={currTodo} onDelete={handleTodoDelete}></TodoItem>
             ))}
           </List>
-        </Paper>
+          <CardActions>{getNumberOfUncompletedTodos()} item left</CardActions>
+        </Card>
       </Box>
     </div>
   );
