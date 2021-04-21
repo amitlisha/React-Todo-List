@@ -1,4 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
+import * as R from "ramda";
+import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
@@ -6,11 +8,15 @@ import TodoItem from "./TodoItem";
 import Todo from "../models/Todo";
 import List from "@material-ui/core/List";
 import CardActions from "@material-ui/core/CardActions";
+import Grid from "@material-ui/core/Grid";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import ToggleButton from "@material-ui/lab/ToggleButton";
 
 interface IProps {}
 
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
+  const [filterTodos, setFilterTodos] = useState<string>("all");
 
   const getNumberOfUncompletedTodos = (): number => {
     return todos.filter((todo) => !todo.isCompleted).length;
@@ -29,17 +35,48 @@ const TodosCard: FunctionComponent<IProps> = () => {
     );
   };
 
+  const handleFilterChange = (event: React.MouseEvent<HTMLElement>) => {
+    setFilterTodos(event.currentTarget.getAttribute("value") || "");
+  };
+
+  const showTodo = (todoToFilter: Todo): boolean => {
+    return filterTodos === "all"
+      ? true
+      : (todoToFilter.isCompleted ? "completed" : "active") === filterTodos;
+  };
+
+  const mapTodoToComponent = (todoToMap: Todo) => (
+    <TodoItem todo={todoToMap} onDelete={handleTodoDelete}></TodoItem>
+  );
+
   return (
     <div>
       <Box m="auto" width="30%">
         <Card>
           <TodoInput onSubmit={handleTodoSubmit}></TodoInput>
           <List>
-            {todos.map((currTodo) => (
-              <TodoItem todo={currTodo} onDelete={handleTodoDelete}></TodoItem>
-            ))}
+            {S.pipe([S.filter(showTodo), S.map(mapTodoToComponent)])(todos)}
           </List>
-          <CardActions>{getNumberOfUncompletedTodos()} item left</CardActions>
+          <CardActions>
+            <Grid container alignItems="center">
+              <Grid item xs={4}>
+                {getNumberOfUncompletedTodos()} item left
+              </Grid>
+              <Grid item xs={4}>
+                <ToggleButtonGroup
+                  size="small"
+                  exclusive
+                  value={filterTodos}
+                  onChange={handleFilterChange}
+                >
+                  <ToggleButton value="all">All</ToggleButton>
+                  <ToggleButton value="active">Active</ToggleButton>
+                  <ToggleButton value="completed">Completed</ToggleButton>
+                </ToggleButtonGroup>
+              </Grid>
+              <Grid item xs={4}></Grid>
+            </Grid>
+          </CardActions>
         </Card>
       </Box>
     </div>
