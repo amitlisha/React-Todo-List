@@ -13,7 +13,6 @@ const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
   const getNumberOfUncompletedTodos = (): number => {
-    debugger;
     return todos.filter((todo) => !todo.isCompleted).length;
   };
 
