@@ -21,6 +21,10 @@ export default class TodoService {
 
     return data;
   }
+
+  public static async updateTodo(todoToUpdate: Todo): Promise<void> {
+    await axios.put(`/todos/${todoToUpdate.id}`, todoToUpdate);
+  }
 }
 
 TodoService.initalize();
