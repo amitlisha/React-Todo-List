@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import Card from "@material-ui/core/Card";
@@ -17,6 +17,14 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>("all");
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      setTodos(await TodoService.getTodos());
+    };
+
+    fetchTodos();
+  }, []);
 
   const getNumberOfUncompletedTodos = (): number => {
     return todos.filter((todo) => !todo.isCompleted).length;

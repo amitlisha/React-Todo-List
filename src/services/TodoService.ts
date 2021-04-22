@@ -15,6 +15,12 @@ export default class TodoService {
   public static async deleteTodo(todoToDelete: Todo): Promise<void> {
     await axios.delete(`/todos/${todoToDelete.id}`);
   }
+
+  public static async getTodos(): Promise<Array<Todo>> {
+    const { data } = await axios.get(`/todos`);
+
+    return data;
+  }
 }
 
 TodoService.initalize();
