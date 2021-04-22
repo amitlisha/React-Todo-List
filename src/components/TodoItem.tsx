@@ -12,13 +12,18 @@ import "../styles/TodoItem.css";
 interface IProps {
   todo: Todo;
   onDelete: (todoToDelete: Todo) => void;
+  onTodoUpdate: (todoToUpdate: Todo) => void;
 }
 
-const TodoItem: FunctionComponent<IProps> = ({ todo, onDelete }) => {
+const TodoItem: FunctionComponent<IProps> = ({
+  todo,
+  onDelete,
+  onTodoUpdate,
+}) => {
   const [isDone, setIsDone] = useState(false);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsDone(event.target.checked);
+    onTodoUpdate({ ...todo, isCompleted: event.target.checked });
   };
 
   const handleTodoDelete = () => {
@@ -31,14 +36,14 @@ const TodoItem: FunctionComponent<IProps> = ({ todo, onDelete }) => {
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={isDone}
+            checked={todo.isCompleted}
             onChange={handleCheckboxChange}
             tabIndex={-1}
             disableRipple
           />
         </ListItemIcon>
         <ListItemText
-          style={{ textDecoration: isDone ? "line-through" : "none" }}
+          style={{ textDecoration: todo.isCompleted ? "line-through" : "none" }}
           primary={todo.text}
         />
         <ListItemSecondaryAction>

@@ -47,6 +47,22 @@ const TodosCard: FunctionComponent<IProps> = () => {
     await TodoService.deleteTodo(todoToDelete);
   };
 
+  const handleTodoUpdate = async (todoToUpdate: Todo): Promise<void> => {
+    const todoToUpdateIndex: number = todos.findIndex(
+      (todo: Todo) => todo.id === todoToUpdate.id
+    );
+
+    console.log(todoToUpdate);
+
+    setTodos((oldArray) => [
+      ...oldArray.slice(0, todoToUpdateIndex),
+      { ...todoToUpdate },
+      ...oldArray.slice(todoToUpdateIndex + 1),
+    ]);
+
+    await TodoService.updateTodo(todoToUpdate);
+  };
+
   const handleFilterChange = (event: React.MouseEvent<HTMLElement>) => {
     setFilterTodos(event.currentTarget.getAttribute("value") || "");
   };
@@ -62,6 +78,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
       key={todoToMap.id}
       todo={todoToMap}
       onDelete={handleTodoDelete}
+      onTodoUpdate={handleTodoUpdate}
     ></TodoItem>
   );
 
