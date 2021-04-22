@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from "react";
-import * as R from "ramda";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import Card from "@material-ui/core/Card";
@@ -11,6 +10,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Grid from "@material-ui/core/Grid";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
+import TodoService from "../services/TodoService";
 
 interface IProps {}
 
@@ -22,17 +22,21 @@ const TodosCard: FunctionComponent<IProps> = () => {
     return todos.filter((todo) => !todo.isCompleted).length;
   };
 
-  const handleTodoSubmit = (todoText: string): void => {
-    setTodos((oldArray) => [
-      ...oldArray,
-      new Todo({ text: todoText, isCompleted: false }),
-    ]);
+  const handleTodoSubmit = async (todoText: string): Promise<void> => {
+    const newTodo: Todo = await TodoService.saveTodo({
+      text: todoText,
+      isCompleted: false,
+    });
+
+    setTodos((oldArray) => [...oldArray, newTodo]);
   };
 
-  const handleTodoDelete = (todoToDelete: Todo): void => {
+  const handleTodoDelete = async (todoToDelete: Todo): Promise<void> => {
     setTodos((oldArray) =>
-      oldArray.filter((currTodo) => currTodo != todoToDelete)
+      oldArray.filter((currTodo) => currTodo.id !== todoToDelete.id)
     );
+
+    await TodoService.deleteTodo(todoToDelete);
   };
 
   const handleFilterChange = (event: React.MouseEvent<HTMLElement>) => {
@@ -46,7 +50,11 @@ const TodosCard: FunctionComponent<IProps> = () => {
   };
 
   const mapTodoToComponent = (todoToMap: Todo) => (
-    <TodoItem todo={todoToMap} onDelete={handleTodoDelete}></TodoItem>
+    <TodoItem
+      key={todoToMap.id}
+      todo={todoToMap}
+      onDelete={handleTodoDelete}
+    ></TodoItem>
   );
 
   return (
