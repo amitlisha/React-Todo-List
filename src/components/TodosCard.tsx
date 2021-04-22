@@ -63,6 +63,8 @@ const TodosCard: FunctionComponent<IProps> = () => {
     await TodoService.updateTodo(todoToUpdate);
   };
 
+  const updateTodo = (updatedTodo: Todo) => {};
+
   const handleFilterChange = (event: React.MouseEvent<HTMLElement>) => {
     setFilterTodos(event.currentTarget.getAttribute("value") || "");
   };
