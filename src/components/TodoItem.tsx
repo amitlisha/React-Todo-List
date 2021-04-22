@@ -22,11 +22,15 @@ const TodoItem: FunctionComponent<IProps> = ({
   onDelete,
   onTodoUpdate,
 }) => {
-  const [isDone, setIsDone] = useState(false);
   const [editTodo, setEditTodo] = useState(false);
+  const [tempTodoText, setTempTodoText] = useState(todo.text);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onTodoUpdate({ ...todo, isCompleted: event.target.checked });
+  };
+
+  const handleTodoEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTempTodoText(event.target.value);
   };
 
   const handleTodoDelete = () => {
@@ -39,10 +43,7 @@ const TodoItem: FunctionComponent<IProps> = ({
 
   const handleClickOutside = () => {
     setEditTodo(false);
-  };
-
-  const handleTodoEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // setInputText(event.target.value);
+    onTodoUpdate({ ...todo, text: tempTodoText });
   };
 
   return (
@@ -59,7 +60,7 @@ const TodoItem: FunctionComponent<IProps> = ({
             />
           </ListItemIcon>
           {editTodo ? (
-            <TextField onChange={handleTodoEdit} value={todo.text} />
+            <TextField onChange={handleTodoEdit} value={tempTodoText} />
           ) : (
             <ListItemText
               style={{
