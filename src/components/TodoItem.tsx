@@ -42,8 +42,10 @@ const TodoItem: FunctionComponent<IProps> = ({
   };
 
   const handleClickOutside = () => {
-    setEditTodo(false);
-    onTodoUpdate({ ...todo, text: tempTodoText });
+    if (editTodo) {
+      setEditTodo(false);
+      onTodoUpdate({ ...todo, text: tempTodoText });
+    }
   };
 
   return (
