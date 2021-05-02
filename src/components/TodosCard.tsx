@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
+import ClearCompleted from "./ClearCompleted";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
@@ -30,6 +31,27 @@ const TodosCard: FunctionComponent<IProps> = () => {
     return todos.filter((todo) => !todo.isCompleted).length;
   };
 
+  const clearAllCompleted = (): void => {
+    const [completedTodos, unCompletedTodos] = todos.reduce(
+      (newArr, todo) => {
+        newArr[todo.isCompleted ? 0 : 1].push(todo);
+        return newArr;
+      },
+      [[], []] as Array<Array<Todo>>
+    );
+
+    const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
+      (todo) =>
+        new Promise((resolve, reject) => {
+          handleTodoDelete(todo);
+          resolve();
+        })
+    );
+
+    setTodos(unCompletedTodos);
+    Promise.all(deleteTodosPromises);
+  };
+
   const handleTodoSubmit = async (todoText: string): Promise<void> => {
     const newTodo: Todo = await TodoService.saveTodo({
       text: todoText,
@@ -51,8 +73,6 @@ const TodosCard: FunctionComponent<IProps> = () => {
     const todoToUpdateIndex: number = todos.findIndex(
       (todo: Todo) => todo.id === todoToUpdate.id
     );
-
-    console.log(todoToUpdate);
 
     setTodos((oldArray) => [
       ...oldArray.slice(0, todoToUpdateIndex),
@@ -109,7 +129,9 @@ const TodosCard: FunctionComponent<IProps> = () => {
                   <ToggleButton value="completed">Completed</ToggleButton>
                 </ToggleButtonGroup>
               </Grid>
-              <Grid item xs={4}></Grid>
+              <Grid item xs={4}>
+                <ClearCompleted onClear={clearAllCompleted}></ClearCompleted>
+              </Grid>
             </Grid>
           </CardActions>
         </Card>
