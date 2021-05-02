@@ -74,8 +74,6 @@ const TodosCard: FunctionComponent<IProps> = () => {
       (todo: Todo) => todo.id === todoToUpdate.id
     );
 
-    console.log(todoToUpdate);
-
     setTodos((oldArray) => [
       ...oldArray.slice(0, todoToUpdateIndex),
       { ...todoToUpdate },
