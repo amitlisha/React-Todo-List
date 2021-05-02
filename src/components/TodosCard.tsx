@@ -12,6 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import TodoService from "../services/TodoService";
+import { FilterState } from "../enums/FilterState";
 
 interface IProps {}
 
@@ -43,7 +44,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
       (todo) =>
         new Promise((resolve, reject) => {
-          handleTodoDelete(todo);
+          TodoService.deleteTodo(todo.id as number);
           resolve();
         })
     );
@@ -61,48 +62,38 @@ const TodosCard: FunctionComponent<IProps> = () => {
     setTodos((oldArray) => [...oldArray, newTodo]);
   };
 
-  const handleTodoDelete = async (todoToDelete: Todo): Promise<void> => {
+  const handleTodoDelete = async (todoToDeleteID: number): Promise<void> => {
     setTodos((oldArray) =>
-      oldArray.filter((currTodo) => currTodo.id !== todoToDelete.id)
+      oldArray.filter((currTodo) => currTodo.id !== todoToDeleteID)
     );
 
-    await TodoService.deleteTodo(todoToDelete);
+    await TodoService.deleteTodo(todoToDeleteID);
   };
 
   const handleTodoUpdate = async (todoToUpdate: Todo): Promise<void> => {
-    const todoToUpdateIndex: number = todos.findIndex(
-      (todo: Todo) => todo.id === todoToUpdate.id
+    setTodos((oldArray) =>
+      oldArray.map((todo) =>
+        todo.id === todoToUpdate.id ? todoToUpdate : todo
+      )
     );
-
-    setTodos((oldArray) => [
-      ...oldArray.slice(0, todoToUpdateIndex),
-      { ...todoToUpdate },
-      ...oldArray.slice(todoToUpdateIndex + 1),
-    ]);
 
     await TodoService.updateTodo(todoToUpdate);
   };
 
-  const updateTodo = (updatedTodo: Todo) => {};
-
-  const handleFilterChange = (event: React.MouseEvent<HTMLElement>) => {
-    setFilterTodos(event.currentTarget.getAttribute("value") || "");
+  const handleFilterChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newFilter: string
+  ) => {
+    setFilterTodos(newFilter);
   };
 
-  const showTodo = (todoToFilter: Todo): boolean => {
-    return filterTodos === "all"
+  const filterTodo = (todoToFilter: Todo): boolean => {
+    return filterTodos === FilterState.ALL
       ? true
-      : (todoToFilter.isCompleted ? "completed" : "active") === filterTodos;
+      : (todoToFilter.isCompleted
+          ? FilterState.COMPLETED
+          : FilterState.ACTIVE) === filterTodos;
   };
-
-  const mapTodoToComponent = (todoToMap: Todo) => (
-    <TodoItem
-      key={todoToMap.id}
-      todo={todoToMap}
-      onDelete={handleTodoDelete}
-      onTodoUpdate={handleTodoUpdate}
-    ></TodoItem>
-  );
 
   return (
     <div>
@@ -110,7 +101,17 @@ const TodosCard: FunctionComponent<IProps> = () => {
         <Card>
           <TodoInput onSubmit={handleTodoSubmit}></TodoInput>
           <List>
-            {S.pipe([S.filter(showTodo), S.map(mapTodoToComponent)])(todos)}
+            {S.pipe([
+              S.filter(filterTodo),
+              S.map((todoToMap: Todo) => (
+                <TodoItem
+                  key={todoToMap.id}
+                  todo={todoToMap}
+                  onDelete={handleTodoDelete}
+                  onTodoUpdate={handleTodoUpdate}
+                />
+              )),
+            ])(todos)}
           </List>
           <CardActions>
             <Grid container alignItems="center">
@@ -124,9 +125,11 @@ const TodosCard: FunctionComponent<IProps> = () => {
                   value={filterTodos}
                   onChange={handleFilterChange}
                 >
-                  <ToggleButton value="all">All</ToggleButton>
-                  <ToggleButton value="active">Active</ToggleButton>
-                  <ToggleButton value="completed">Completed</ToggleButton>
+                  <ToggleButton value={FilterState.ALL}>All</ToggleButton>
+                  <ToggleButton value={FilterState.ACTIVE}>Active</ToggleButton>
+                  <ToggleButton value={FilterState.COMPLETED}>
+                    Completed
+                  </ToggleButton>
                 </ToggleButtonGroup>
               </Grid>
               <Grid item xs={4}>

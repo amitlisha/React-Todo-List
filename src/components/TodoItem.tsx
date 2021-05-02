@@ -13,7 +13,7 @@ import "../styles/TodoItem.css";
 
 interface IProps {
   todo: Todo;
-  onDelete: (todoToDelete: Todo) => void;
+  onDelete: (todoToDeleteID: number) => void;
   onTodoUpdate: (todoToUpdate: Todo) => void;
 }
 
@@ -22,8 +22,8 @@ const TodoItem: FunctionComponent<IProps> = ({
   onDelete,
   onTodoUpdate,
 }) => {
-  const [editTodo, setEditTodo] = useState(false);
-  const [tempTodoText, setTempTodoText] = useState(todo.text);
+  const [editTodo, setEditTodo] = useState<boolean>(false);
+  const [tempTodoText, setTempTodoText] = useState<string>(todo.text);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onTodoUpdate({ ...todo, isCompleted: event.target.checked });
@@ -34,10 +34,12 @@ const TodoItem: FunctionComponent<IProps> = ({
   };
 
   const handleTodoDelete = () => {
-    onDelete(todo);
+    if (todo.id) {
+      onDelete(todo.id as number);
+    }
   };
 
-  const handleChangeEditState = () => {
+  const enableEdit = () => {
     setEditTodo(true);
   };
 
@@ -51,7 +53,7 @@ const TodoItem: FunctionComponent<IProps> = ({
   return (
     <ClickAwayListener onClickAway={handleClickOutside}>
       <div className="todo-item">
-        <ListItem dense button divider onDoubleClick={handleChangeEditState}>
+        <ListItem dense button divider onDoubleClick={enableEdit}>
           <ListItemIcon>
             <Checkbox
               edge="start"
