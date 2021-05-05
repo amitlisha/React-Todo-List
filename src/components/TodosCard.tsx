@@ -20,6 +20,7 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>("all");
+  const [currentTodoToUpdate, setCurrentTodo] = useState<Todo>();
   const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
   const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
 
@@ -120,7 +121,10 @@ const TodosCard: FunctionComponent<IProps> = () => {
                   todo={todoToMap}
                   onDelete={handleTodoDelete}
                   onTodoUpdate={handleTodoUpdate}
-                  openTimeModal={() => setTimeModal(true)}
+                  openTimeModal={() => {
+                    setTimeModal(true);
+                    setCurrentTodo({ ...todoToMap });
+                  }}
                 />
               )),
             ])(todos)}
@@ -151,11 +155,14 @@ const TodosCard: FunctionComponent<IProps> = () => {
           </CardActions>
         </Card>
       </Box>
-      <TimePickModal
-        isOpen={isTimeModalOpen}
-        handleClose={() => setTimeModal(false)}
-        todo={todos[0]}
-      ></TimePickModal>
+      {currentTodoToUpdate && (
+        <TimePickModal
+          isOpen={isTimeModalOpen}
+          handleClose={() => setTimeModal(false)}
+          todo={currentTodoToUpdate}
+          updateTodoTime={handleTodoUpdate}
+        ></TimePickModal>
+      )}
     </div>
   );
 };
