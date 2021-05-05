@@ -2,7 +2,6 @@ let todos = [];
 
 self.onmessage = (e) => {
   todos = e.data;
-  console.log(todos);
 };
 
 const checkTodosDeadline = () => {
