@@ -11,20 +11,18 @@ const checkTodosDeadline = () => {
   nowDate.setSeconds(0);
 
   todos.forEach((todo) => {
-    if (
-      todo.deadlineTime.getSeconds() !== 0 ||
-      todo.deadlineTime.getMilliseconds() !== 0
-    ) {
-      todo.deadlineTime.setSeconds(0);
-      todo.deadlineTime.setMilliseconds(0);
-    }
+    if (todo.deadlineTime) {
+      if (
+        todo.deadlineTime.getSeconds() !== 0 ||
+        todo.deadlineTime.getMilliseconds() !== 0
+      ) {
+        todo.deadlineTime.setSeconds(0);
+        todo.deadlineTime.setMilliseconds(0);
+      }
 
-    if (
-      todo.deadlineTime &&
-      nowDate.getTime() === todo.deadlineTime.getTime()
-    ) {
-      self.postMessage(todo);
-      console.log("it is");
+      if (nowDate.getTime() === todo.deadlineTime.getTime()) {
+        self.postMessage(todo.id);
+      }
     }
   });
 };

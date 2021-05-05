@@ -3,6 +3,7 @@ import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import ClearCompleted from "./ClearCompleted";
 import TimePickModal from "./TimePickModal";
+import CompleteTodoModal from "./CompleteTodoModal";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
@@ -20,12 +21,15 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>("all");
-  const [currentTodoToUpdate, setCurrentTodo] = useState<Todo>();
+  const [currentTodoToUpdate, setCurrentTodoToUpdate] = useState<Todo>();
+  const [currentTodoDeadline, setCurrentTodoDeadline] = useState<Todo>();
   const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
+  const [isDeadlineModalopen, setDeadlineModal] = useState<boolean>(false);
   const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
-    console.log("amit");
+    setCurrentTodoDeadline(todos.find((todo: Todo) => todo.id === event.data));
+    setDeadlineModal(true);
   };
 
   useEffect(() => {
@@ -131,7 +135,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
                   onTodoUpdate={handleTodoUpdate}
                   openTimeModal={() => {
                     setTimeModal(true);
-                    setCurrentTodo({ ...todoToMap });
+                    setCurrentTodoToUpdate({ ...todoToMap });
                   }}
                 />
               )),
@@ -170,6 +174,14 @@ const TodosCard: FunctionComponent<IProps> = () => {
           todo={currentTodoToUpdate}
           updateTodoTime={handleTodoUpdate}
         ></TimePickModal>
+      )}
+      {currentTodoDeadline && (
+        <CompleteTodoModal
+          isOpen={isDeadlineModalopen}
+          handleClose={() => setDeadlineModal(false)}
+          todo={currentTodoDeadline}
+          updateTodoState={handleTodoUpdate}
+        ></CompleteTodoModal>
       )}
     </div>
   );
