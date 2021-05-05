@@ -6,9 +6,23 @@ self.onmessage = (e) => {
 };
 
 const checkTodosDeadline = () => {
-  nowDate = new Date(new Date().setSeconds(0)).setMilliseconds(0);
+  nowDate = new Date();
+  nowDate.setMilliseconds(0);
+  nowDate.setSeconds(0);
+
   todos.forEach((todo) => {
-    if (todo.deadlineTime && nowDate === todo.deadlineTime.setMilliseconds(0)) {
+    if (
+      todo.deadlineTime.getSeconds() !== 0 ||
+      todo.deadlineTime.getMilliseconds() !== 0
+    ) {
+      todo.deadlineTime.setSeconds(0);
+      todo.deadlineTime.setMilliseconds(0);
+    }
+
+    if (
+      todo.deadlineTime &&
+      nowDate.getTime() === todo.deadlineTime.getTime()
+    ) {
       self.postMessage(todo);
       console.log("it is");
     }
