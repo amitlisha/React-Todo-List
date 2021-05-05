@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import ClearCompleted from "./ClearCompleted";
+import TimePickModal from "./TimePickModal";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
@@ -19,6 +20,7 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>("all");
+  const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
   const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
@@ -118,6 +120,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
                   todo={todoToMap}
                   onDelete={handleTodoDelete}
                   onTodoUpdate={handleTodoUpdate}
+                  openTimeModal={() => setTimeModal(true)}
                 />
               )),
             ])(todos)}
@@ -148,6 +151,11 @@ const TodosCard: FunctionComponent<IProps> = () => {
           </CardActions>
         </Card>
       </Box>
+      <TimePickModal
+        isOpen={isTimeModalOpen}
+        handleClose={() => setTimeModal(false)}
+        todo={todos[0]}
+      ></TimePickModal>
     </div>
   );
 };
