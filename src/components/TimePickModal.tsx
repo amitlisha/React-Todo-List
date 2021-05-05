@@ -31,6 +31,7 @@ const TimePickModal: FunctionComponent<IProps> = ({
 
   const handleUpdateSubmit = () => {
     updateTodoTime({ ...todo, deadlineTime: newDate });
+    handleClose();
   };
 
   return (

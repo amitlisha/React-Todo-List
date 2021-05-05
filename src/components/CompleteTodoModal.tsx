@@ -40,7 +40,7 @@ const CompleteTodoModal: FunctionComponent<IProps> = ({
         <Button variant="outlined" onClick={handleUpdateSubmit}>
           Complete Todo
         </Button>
-        <Button variant="outlined" onClick={handleUpdateSubmit}>
+        <Button variant="outlined" onClick={handleClose}>
           Close
         </Button>
       </DialogActions>
