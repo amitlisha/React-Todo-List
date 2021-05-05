@@ -7,6 +7,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import React, { FunctionComponent, useState } from "react";
 import Todo from "../models/Todo";
 import "../styles/TodoItem.css";
@@ -15,12 +16,14 @@ interface IProps {
   todo: Todo;
   onDelete: (todoToDeleteID: number) => void;
   onTodoUpdate: (todoToUpdate: Todo) => void;
+  openTimeModal: (todo: Todo) => void;
 }
 
 const TodoItem: FunctionComponent<IProps> = ({
   todo,
   onDelete,
   onTodoUpdate,
+  openTimeModal,
 }) => {
   const [editTodo, setEditTodo] = useState<boolean>(false);
   const [tempTodoText, setTempTodoText] = useState<string>(todo.text);
@@ -31,6 +34,10 @@ const TodoItem: FunctionComponent<IProps> = ({
 
   const handleTodoEdit = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTempTodoText(event.target.value);
+  };
+
+  const handleTodoTimeUpdate = () => {
+    openTimeModal(todo);
   };
 
   const handleTodoDelete = () => {
@@ -73,12 +80,18 @@ const TodoItem: FunctionComponent<IProps> = ({
               primary={todo.text}
             />
           )}
-          <ListItemSecondaryAction>
+          <ListItemSecondaryAction className="secondary-buttons">
+            <IconButton
+              edge="end"
+              aria-label="time"
+              onClick={handleTodoTimeUpdate}
+            >
+              <AccessTimeIcon></AccessTimeIcon>
+            </IconButton>
             <IconButton
               edge="end"
               aria-label="delete"
               onClick={handleTodoDelete}
-              className="delete-button"
             >
               <DeleteForeverIcon />
             </IconButton>

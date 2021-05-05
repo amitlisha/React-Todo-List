@@ -2,6 +2,8 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import ClearCompleted from "./ClearCompleted";
+import TimePickModal from "./TimePickModal";
+import CompleteTodoModal from "./CompleteTodoModal";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
@@ -19,14 +21,36 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>("all");
+  const [currentTodoToUpdate, setCurrentTodoToUpdate] = useState<Todo>();
+  const [currentTodoDeadline, setCurrentTodoDeadline] = useState<Todo>();
+  const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
+  const [isDeadlineModalopen, setDeadlineModal] = useState<boolean>(false);
+  const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
+
+  remaindersWorker.onmessage = (event: MessageEvent) => {
+    setCurrentTodoDeadline(todos.find((todo: Todo) => todo.id === event.data));
+    setDeadlineModal(true);
+  };
 
   useEffect(() => {
     const fetchTodos = async () => {
-      setTodos(await TodoService.getTodos());
+      const todosFromServer: Array<Todo> = await TodoService.getTodos();
+      setTodos(
+        todosFromServer.map((todo: Todo) => {
+          return {
+            ...todo,
+            deadlineTime: new Date((todo.deadlineTime as unknown) as string),
+          };
+        })
+      );
     };
 
     fetchTodos();
   }, []);
+
+  useEffect(() => {
+    remaindersWorker.postMessage(todos);
+  }, [todos]);
 
   const getNumberOfUncompletedTodos = (): number => {
     return todos.filter((todo) => !todo.isCompleted).length;
@@ -109,6 +133,10 @@ const TodosCard: FunctionComponent<IProps> = () => {
                   todo={todoToMap}
                   onDelete={handleTodoDelete}
                   onTodoUpdate={handleTodoUpdate}
+                  openTimeModal={() => {
+                    setTimeModal(true);
+                    setCurrentTodoToUpdate({ ...todoToMap });
+                  }}
                 />
               )),
             ])(todos)}
@@ -139,6 +167,22 @@ const TodosCard: FunctionComponent<IProps> = () => {
           </CardActions>
         </Card>
       </Box>
+      {currentTodoToUpdate && (
+        <TimePickModal
+          isOpen={isTimeModalOpen}
+          handleClose={() => setTimeModal(false)}
+          todo={currentTodoToUpdate}
+          updateTodoTime={handleTodoUpdate}
+        ></TimePickModal>
+      )}
+      {currentTodoDeadline && (
+        <CompleteTodoModal
+          isOpen={isDeadlineModalopen}
+          handleClose={() => setDeadlineModal(false)}
+          todo={currentTodoDeadline}
+          updateTodoState={handleTodoUpdate}
+        ></CompleteTodoModal>
+      )}
     </div>
   );
 };

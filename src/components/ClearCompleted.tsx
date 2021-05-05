@@ -1,5 +1,5 @@
 import Button from "@material-ui/core/Button";
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 
 interface IProps {
   onClear: () => void;

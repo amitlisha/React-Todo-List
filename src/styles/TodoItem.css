@@ -1,7 +1,7 @@
-.todo-item:hover .delete-button {
+.todo-item:hover .secondary-buttons {
   display: block;
 }
 
-.todo-item .delete-button {
+.todo-item .secondary-buttons {
   display: none;
 }
