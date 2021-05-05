@@ -25,12 +25,20 @@ const TodosCard: FunctionComponent<IProps> = () => {
   const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
-    console.log(event.data);
+    console.log("amit");
   };
 
   useEffect(() => {
     const fetchTodos = async () => {
-      setTodos(await TodoService.getTodos());
+      const todosFromServer: Array<Todo> = await TodoService.getTodos();
+      setTodos(
+        todosFromServer.map((todo: Todo) => {
+          return {
+            ...todo,
+            deadlineTime: new Date((todo.deadlineTime as unknown) as string),
+          };
+        })
+      );
     };
 
     fetchTodos();
