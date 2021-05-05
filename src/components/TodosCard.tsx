@@ -19,6 +19,11 @@ interface IProps {}
 const TodosCard: FunctionComponent<IProps> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>("all");
+  const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
+
+  remaindersWorker.onmessage = (event: MessageEvent) => {
+    console.log(event.data);
+  };
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -27,6 +32,10 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
     fetchTodos();
   }, []);
+
+  useEffect(() => {
+    remaindersWorker.postMessage(todos);
+  }, [todos]);
 
   const getNumberOfUncompletedTodos = (): number => {
     return todos.filter((todo) => !todo.isCompleted).length;
