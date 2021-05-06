@@ -1,3 +1,4 @@
+import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import React, { FunctionComponent, useState } from "react";
 
@@ -20,13 +21,15 @@ const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
   };
 
   return (
-    <TextField
-      label="What needs to be done?"
-      value={inputText}
-      variant="outlined"
-      onChange={handleInputChange}
-      onKeyDown={handleInputSubmit}
-    />
+    <Box mt={2}>
+      <TextField
+        label="What needs to be done?"
+        value={inputText}
+        variant="outlined"
+        onChange={handleInputChange}
+        onKeyDown={handleInputSubmit}
+      />
+    </Box>
   );
 };
 

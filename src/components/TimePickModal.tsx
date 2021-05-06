@@ -36,7 +36,7 @@ const TimePickModal: FunctionComponent<IProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>Update todo's deadline time</DialogTitle>
+      <DialogTitle>Update Todo's Deadline Time</DialogTitle>
       <DialogContent>
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <DateTimePicker
@@ -46,11 +46,16 @@ const TimePickModal: FunctionComponent<IProps> = ({
             onChange={(date: MaterialUiPickersDate) =>
               setNewDate((date as Moment).toDate())
             }
+            style={{ margin: "0 auto", display: "flex" }}
           />
         </MuiPickersUtilsProvider>
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={handleUpdateSubmit}>
+        <Button
+          variant="outlined"
+          style={{ margin: "0 auto" }}
+          onClick={handleUpdateSubmit}
+        >
           Submit
         </Button>
       </DialogActions>

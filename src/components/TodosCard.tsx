@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useState, useEffect, useMemo } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import Modals from "./Modals";
@@ -21,7 +21,10 @@ const TodosCard: FunctionComponent<IProps> = () => {
   const [currentTodoDeadline, setCurrentTodoDeadline] = useState<Todo>();
   const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
   const [isDeadlineModalOpen, setDeadlineModal] = useState<boolean>(false);
-  const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
+  const remaindersWorker = useMemo(
+    () => new Worker("/workers/RemaindersWorker.js"),
+    []
+  );
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
     setCurrentTodoDeadline(todos.find((todo: Todo) => todo.id === event.data));
@@ -46,7 +49,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   useEffect(() => {
     remaindersWorker.postMessage(todos);
-  }, [todos]);
+  }, [todos, remaindersWorker]);
 
   const getNumberOfUncompletedTodos = (): number => {
     return todos.filter((todo) => !todo.isCompleted).length;
@@ -117,9 +120,9 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   return (
     <div>
-      <Box m="auto" width="30%">
+      <Box m="auto" width="50%">
         <Card>
-          <TodoInput onSubmit={handleTodoSubmit}></TodoInput>
+          <TodoInput onSubmit={handleTodoSubmit} />
           <List>
             {S.pipe([
               S.filter(filterTodo),
@@ -142,7 +145,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
             numberOfUncompletedTodos={getNumberOfUncompletedTodos()}
             handleFilterChange={handleFilterChange}
             clearAllCompleted={clearAllCompleted}
-          ></CardFooter>
+          />
         </Card>
       </Box>
       <Modals
@@ -153,7 +156,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
         handleTodoUpdate={handleTodoUpdate}
         onTimeModalClose={() => setTimeModal(false)}
         onDeadlineModalClose={() => setDeadlineModal(false)}
-      ></Modals>
+      />
     </div>
   );
 };

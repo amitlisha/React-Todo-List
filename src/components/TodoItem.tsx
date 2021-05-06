@@ -74,8 +74,10 @@ const TodoItem: FunctionComponent<IProps> = ({
             <TextField onChange={handleTodoEdit} value={tempTodoText} />
           ) : (
             <ListItemText
+              disableTypography
               style={{
                 textDecoration: todo.isCompleted ? "line-through" : "none",
+                fontSize: "1rem",
               }}
               primary={todo.text}
             />
