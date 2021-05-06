@@ -1,18 +1,14 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
-import ClearCompleted from "./ClearCompleted";
-import TimePickModal from "./TimePickModal";
-import CompleteTodoModal from "./CompleteTodoModal";
+import Modals from "./Modals";
+import CardFooter from "./CardFooter";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
 import Todo from "../models/Todo";
 import List from "@material-ui/core/List";
-import CardActions from "@material-ui/core/CardActions";
-import Grid from "@material-ui/core/Grid";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import ToggleButton from "@material-ui/lab/ToggleButton";
+
 import TodoService from "../services/TodoService";
 import { FilterState } from "../enums/FilterState";
 
@@ -24,7 +20,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
   const [currentTodoToUpdate, setCurrentTodoToUpdate] = useState<Todo>();
   const [currentTodoDeadline, setCurrentTodoDeadline] = useState<Todo>();
   const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
-  const [isDeadlineModalopen, setDeadlineModal] = useState<boolean>(false);
+  const [isDeadlineModalOpen, setDeadlineModal] = useState<boolean>(false);
   const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
@@ -141,48 +137,23 @@ const TodosCard: FunctionComponent<IProps> = () => {
               )),
             ])(todos)}
           </List>
-          <CardActions>
-            <Grid container alignItems="center">
-              <Grid item xs={4}>
-                {getNumberOfUncompletedTodos()} item left
-              </Grid>
-              <Grid item xs={4}>
-                <ToggleButtonGroup
-                  size="small"
-                  exclusive
-                  value={filterTodos}
-                  onChange={handleFilterChange}
-                >
-                  <ToggleButton value={FilterState.ALL}>All</ToggleButton>
-                  <ToggleButton value={FilterState.ACTIVE}>Active</ToggleButton>
-                  <ToggleButton value={FilterState.COMPLETED}>
-                    Completed
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </Grid>
-              <Grid item xs={4}>
-                <ClearCompleted onClear={clearAllCompleted}></ClearCompleted>
-              </Grid>
-            </Grid>
-          </CardActions>
+          <CardFooter
+            filterTodos={filterTodos}
+            numberOfUncompletedTodos={getNumberOfUncompletedTodos()}
+            handleFilterChange={handleFilterChange}
+            clearAllCompleted={clearAllCompleted}
+          ></CardFooter>
         </Card>
       </Box>
-      {currentTodoToUpdate && (
-        <TimePickModal
-          isOpen={isTimeModalOpen}
-          handleClose={() => setTimeModal(false)}
-          todo={currentTodoToUpdate}
-          updateTodoTime={handleTodoUpdate}
-        ></TimePickModal>
-      )}
-      {currentTodoDeadline && (
-        <CompleteTodoModal
-          isOpen={isDeadlineModalopen}
-          handleClose={() => setDeadlineModal(false)}
-          todo={currentTodoDeadline}
-          updateTodoState={handleTodoUpdate}
-        ></CompleteTodoModal>
-      )}
+      <Modals
+        isTimeModalOpen={isTimeModalOpen}
+        isDeadlineModalOpen={isDeadlineModalOpen}
+        currentTodoDeadline={currentTodoDeadline as Todo}
+        currentTodoToUpdate={currentTodoToUpdate as Todo}
+        handleTodoUpdate={handleTodoUpdate}
+        onTimeModalClose={() => setTimeModal(false)}
+        onDeadlineModalClose={() => setDeadlineModal(false)}
+      ></Modals>
     </div>
   );
 };
