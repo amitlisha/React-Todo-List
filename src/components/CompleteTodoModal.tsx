@@ -22,6 +22,7 @@ const CompleteTodoModal: FunctionComponent<IProps> = ({
 }) => {
   const handleUpdateSubmit = () => {
     updateTodoState({ ...todo, isCompleted: true });
+    handleClose();
   };
 
   return (
