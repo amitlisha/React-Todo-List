@@ -120,9 +120,9 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   return (
     <div>
-      <Box m="auto" width="30%">
+      <Box m="auto" width="50%">
         <Card>
-          <TodoInput onSubmit={handleTodoSubmit}></TodoInput>
+          <TodoInput onSubmit={handleTodoSubmit} />
           <List>
             {S.pipe([
               S.filter(filterTodo),
@@ -145,7 +145,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
             numberOfUncompletedTodos={getNumberOfUncompletedTodos()}
             handleFilterChange={handleFilterChange}
             clearAllCompleted={clearAllCompleted}
-          ></CardFooter>
+          />
         </Card>
       </Box>
       <Modals
@@ -156,7 +156,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
         handleTodoUpdate={handleTodoUpdate}
         onTimeModalClose={() => setTimeModal(false)}
         onDeadlineModalClose={() => setDeadlineModal(false)}
-      ></Modals>
+      />
     </div>
   );
 };

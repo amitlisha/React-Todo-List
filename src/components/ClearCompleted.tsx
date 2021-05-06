@@ -10,7 +10,11 @@ const ClearCompleted: FunctionComponent<IProps> = ({ onClear }) => {
     onClear();
   };
 
-  return <Button onClick={handleClear}>Clear completed</Button>;
+  return (
+    <Button style={{ height: "100%" }} variant="outlined" onClick={handleClear}>
+      Clear completed
+    </Button>
+  );
 };
 
 export default ClearCompleted;

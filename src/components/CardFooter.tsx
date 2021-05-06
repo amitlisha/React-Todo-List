@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import React, { FunctionComponent } from "react";
 import FilterTodos from "./FilterTodos";
 import ClearCompleted from "./ClearCompleted";
-
+import Card from "@material-ui/core/Card";
 interface IProps {
   filterTodos: string;
   numberOfUncompletedTodos: number;
@@ -22,18 +22,29 @@ const CardFooter: FunctionComponent<IProps> = ({
 }) => {
   return (
     <CardActions>
-      <Grid container alignItems="center">
+      <Grid container alignItems="stretch" justify="space-around">
         <Grid item xs={4}>
-          {numberOfUncompletedTodos} items left
+          <Card
+            style={{
+              margin: "auto 5%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            variant="outlined"
+          >
+            {numberOfUncompletedTodos} ITEMS LEFT
+          </Card>
         </Grid>
         <Grid item xs={4}>
           <FilterTodos
             filterTodos={filterTodos}
             onChange={handleFilterChange}
-          ></FilterTodos>
+          />
         </Grid>
         <Grid item xs={4}>
-          <ClearCompleted onClear={clearAllCompleted}></ClearCompleted>
+          <ClearCompleted onClear={clearAllCompleted} />
         </Grid>
       </Grid>
     </CardActions>
