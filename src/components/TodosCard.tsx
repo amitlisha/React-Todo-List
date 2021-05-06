@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useState, useEffect, useMemo } from "react";
 import S from "sanctuary";
 import TodoInput from "./TodoInput";
 import Modals from "./Modals";
@@ -21,7 +21,10 @@ const TodosCard: FunctionComponent<IProps> = () => {
   const [currentTodoDeadline, setCurrentTodoDeadline] = useState<Todo>();
   const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
   const [isDeadlineModalOpen, setDeadlineModal] = useState<boolean>(false);
-  const remaindersWorker = new Worker("/workers/RemaindersWorker.js");
+  const remaindersWorker = useMemo(
+    () => new Worker("/workers/RemaindersWorker.js"),
+    []
+  );
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
     setCurrentTodoDeadline(todos.find((todo: Todo) => todo.id === event.data));
@@ -46,7 +49,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   useEffect(() => {
     remaindersWorker.postMessage(todos);
-  }, [todos]);
+  }, [todos, remaindersWorker]);
 
   const getNumberOfUncompletedTodos = (): number => {
     return todos.filter((todo) => !todo.isCompleted).length;
