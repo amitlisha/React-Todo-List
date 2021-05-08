@@ -1,9 +1,24 @@
 import axios from "axios";
 import Todo from "../models/Todo";
+import Swal from "sweetalert2";
 
 export default class TodoService {
   static initalize() {
     axios.defaults.baseURL = "http://localhost:9000/";
+    axios.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      function (error: Error) {
+        Swal.fire({
+          title: "Something wrong happened",
+          text: error.message + ", The action you just did wasn't saved",
+          icon: "error",
+        });
+
+        return Promise.reject(error);
+      }
+    );
   }
 
   public static async saveTodo(todoToSave: Todo): Promise<Todo> {
