@@ -1,30 +1,32 @@
 let todos = [];
+let timeoutIDs = [];
 
-self.onmessage = (e) => {
-  todos = e.data;
-};
-
-const checkTodosDeadline = () => {
-  nowDate = new Date();
-  nowDate.setMilliseconds(0);
-  nowDate.setSeconds(0);
-
-  todos.forEach((todo) => {
-    if (todo.deadlineTime) {
-      if (
-        todo.deadlineTime.getSeconds() !== 0 ||
-        todo.deadlineTime.getMilliseconds() !== 0
-      ) {
-        todo.deadlineTime.setSeconds(0);
-        todo.deadlineTime.setMilliseconds(0);
-      }
-
-      if (nowDate.getTime() === todo.deadlineTime.getTime()) {
-        self.postMessage(todo.id);
-      }
-    }
+clearTimeouts = (timeoutIDs) => {
+  timeoutIDs.forEach((timeoutID) => {
+    clearTimeout(timeoutID);
   });
 };
 
-checkTodosDeadline();
-setInterval(checkTodosDeadline, 60000);
+self.onmessage = (e) => {
+  todos = e.data;
+  clearTimeouts(timeoutIDs);
+  timeoutIDs = setTimeouts();
+};
+
+const setTimeouts = () => {
+  newTimeoutIDs = [];
+  nowTime = new Date().getTime();
+
+  todos.forEach((todo) => {
+    todosTime = todo.deadlineTime.getTime();
+    console.log(todosTime - nowTime);
+
+    if (todosTime > nowTime) {
+      newTimeoutIDs.push(
+        setTimeout(() => self.postMessage(todo.id), todosTime - nowTime)
+      );
+    }
+  });
+
+  return newTimeoutIDs;
+};
