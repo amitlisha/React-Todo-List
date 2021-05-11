@@ -6,6 +6,7 @@ export default class Todo {
   // TODO: why is it mandatory? fields like this should have default value.
   // think about the case when you create a new todo, it is not completed by default
   isCompleted!: boolean;
+  // TODO: objects that return from the server cannot be anything that is not a "primitive" type liek array, string etc.
   deadlineTime?: Date;
 
   // TODO: it seems like you don't create an instance using this ctor.
