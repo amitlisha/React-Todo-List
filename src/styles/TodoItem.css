@@ -1,3 +1,4 @@
+/* TODO: please read about style modules and what is it used for (https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/) */
 .todo-item:hover .secondary-buttons {
   display: block;
 }
