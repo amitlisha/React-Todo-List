@@ -19,6 +19,7 @@ interface IProps {
   openTimeModal: (todo: Todo) => void;
 }
 
+// TODO: read about React.memo() and implement across the application (think wisely where it should be implemented and why it's not always recommended to use it)
 const TodoItem: FunctionComponent<IProps> = ({
   todo,
   onDelete,

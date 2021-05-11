@@ -9,6 +9,9 @@ clearTimeouts = (timeoutIDs) => {
 
 self.onmessage = (e) => {
   todos = e.data;
+  // TODO: you clear all timeouts even for things you should keep 
+  // and then set them again.
+  // think of a more efficient way to implement it in a way that you'd clear the timeout only for those who needs.
   clearTimeouts(timeoutIDs);
   timeoutIDs = setTimeouts();
 };
