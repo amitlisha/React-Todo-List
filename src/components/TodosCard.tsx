@@ -71,11 +71,22 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   // TODO: remove return type
   const getNumberOfUncompletedTodos = (): number => {
+    // TODO: remove unused parentheses
     return todos.filter((todo) => !todo.isCompleted).length;
   };
 
   const clearAllCompleted = (): void => {
+    // TODO: please notice the changes using the types:
+    // const [completedTodos, unCompletedTodos] = todos.reduce<Todo[][]>(
+    //   (newArr, todo) => {
+    //     newArr[todo.isCompleted ? 0 : 1].push(todo);
+    //     return newArr;
+    //   },
+    //   [[], []]
+    // );|
     const [completedTodos, unCompletedTodos] = todos.reduce(
+      // TODO: the convention is to call it `accumulator` instead of `newArr`.
+      // in general, the type of the collection/variable should not be included in the name itself.
       (newArr, todo) => {
         newArr[todo.isCompleted ? 0 : 1].push(todo);
         return newArr;
@@ -83,6 +94,8 @@ const TodosCard: FunctionComponent<IProps> = () => {
       [[], []] as Array<Array<Todo>>
     );
 
+    // TODO: that's not efficient, you make http requests in loop,
+    // what will happen if there are alot of todos?
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
       (todo) =>
         new Promise((resolve, reject) => {
@@ -92,6 +105,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
     );
 
     setTodos(unCompletedTodos);
+    // Good job using Promise.all
     Promise.all(deleteTodosPromises);
   };
 
@@ -105,6 +119,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
   };
 
   const handleTodoDelete = async (todoToDeleteID: number): Promise<void> => {
+    // TODO: what happens if the deleteTodo request fails? you still delete it in the UI and will make your application inconsistent with the db
     setTodos((oldArray) =>
       oldArray.filter((currTodo) => currTodo.id !== todoToDeleteID)
     );
@@ -113,6 +128,9 @@ const TodosCard: FunctionComponent<IProps> = () => {
   };
 
   const handleTodoUpdate = async (todoToUpdate: Todo): Promise<void> => {
+    // TODO: your application is based on todos list, which can turn out to be huge.
+    // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
+    // hint: you can do the replacement in O(1)
     setTodos((oldArray) =>
       oldArray.map((todo) =>
         todo.id === todoToUpdate.id ? todoToUpdate : todo
@@ -126,9 +144,11 @@ const TodosCard: FunctionComponent<IProps> = () => {
     event: React.MouseEvent<HTMLElement>,
     newFilter: string
   ) => {
+    // TODO: 
     setFilterTodos(newFilter);
   };
 
+  // TODO: the name doesn't imply boolean result, but a filter action - rename
   const filterTodo = (todoToFilter: Todo): boolean => {
     return filterTodos === FilterState.ALL
       ? true
@@ -138,19 +158,24 @@ const TodosCard: FunctionComponent<IProps> = () => {
   };
 
   return (
+    // TODO: read about react fragment
     <div>
       <Box m="auto" width="50%">
         <Card>
+          {/* TODO: please read about useCallback and redesign your code accordingly + I would like to ask you afterwards how it improves the performance of our application. */}
           <TodoInput onSubmit={handleTodoSubmit} />
           <List>
             {S.pipe([
               S.filter(filterTodo),
               S.map((todoToMap: Todo) => (
+                // TODO: if you're not familiar with react reconcilation, then please read (https://reactjs.org/docs/reconciliation.html) + read about react diff alogirthm from the same source
+                // and explain why we need the `key` prop
                 <TodoItem
                   key={todoToMap.id}
                   todo={todoToMap}
                   onDelete={handleTodoDelete}
                   onTodoUpdate={handleTodoUpdate}
+                  // TODO: is there a reason why this one is anonymous?
                   openTimeModal={() => {
                     setTimeModal(true);
                     setCurrentTodoToUpdate({ ...todoToMap });
@@ -161,6 +186,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
           </List>
           <CardFooter
             filterTodos={filterTodos}
+            // TODO: use useMemo hook to prevent unnecessary rendering
             numberOfUncompletedTodos={getNumberOfUncompletedTodos()}
             handleFilterChange={handleFilterChange}
             clearAllCompleted={clearAllCompleted}

@@ -13,6 +13,9 @@ interface IProps {
   onDeadlineModalClose: () => void;
 }
 
+// TODO: please read about SOLID. especially on Open for extension Closed for modification principle and 
+// redesign this component entirely.
+// hint: extract it into different modals and I want you to explain why this implementation is wrong is aspect of design and performance issues with react life cycles
 const Modals: FunctionComponent<IProps> = ({
   isTimeModalOpen,
   currentTodoDeadline,
