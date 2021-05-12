@@ -109,7 +109,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
       (todo) =>
         new Promise((resolve, reject) => {
-          TodoService.deleteTodo(todo.id as number);
+          TodoService.delete(todo.id as number);
           resolve();
         })
     );
@@ -121,7 +121,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   const handleTodoSubmit = async (todoText: string): Promise<void> => {
     try {
-      const newTodo: Todo = await TodoService.saveTodo({
+      const newTodo: Todo = await TodoService.save({
         text: todoText,
         isCompleted: false,
       });
@@ -138,7 +138,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   const handleTodoDelete = async (todoToDeleteID: number): Promise<void> => {
     try {
-      await TodoService.deleteTodo(todoToDeleteID);
+      await TodoService.delete(todoToDeleteID);
 
       setTodos((oldArray) =>
         oldArray.filter((currTodo) => currTodo.id !== todoToDeleteID)
@@ -157,7 +157,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
     // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
     // hint: you can do the replacement in O(1)
     try {
-      await TodoService.updateTodo(todoToUpdate);
+      await TodoService.update(todoToUpdate);
 
       setTodos((oldArray) =>
         oldArray.map((todo) =>

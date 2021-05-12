@@ -6,22 +6,16 @@ import Todo from "../models/Todo";
 // or auto complete by the IDE. Another problem is exporting big objects instead of dividing to smaller exports.
 
 export default class TodoService {
-  // TODO: no need to call the param `todoToSave` and or `saveTodo` method name,
-  // we're already in save method in TodoService class.
-  // keep in mind that naming conventions are important, don't add words that do not make the code clearer
-  // I'll repeat this comment in a few more places but not all of them only to make sure you understand
-  // my intention
-  public static async saveTodo(todoToSave: Todo): Promise<Todo> {
-    const { data } = await axiosInstance.post(`/todos`, todoToSave);
+  public static async save(todo: Todo): Promise<Todo> {
+    const { data } = await axiosInstance.post(`/todos`, todo);
 
     return data;
   }
 
   // TODO: please notice that delete of multiple todos at once is not supported.
   // no need to implement as long as you're aware of the problem with the UX.
-  // TODO: name the method `delete`, and the param `id` because it's obvious you want to delete a todo
-  public static async deleteTodo(todoToDeleteID: number): Promise<void> {
-    await axiosInstance.delete(`/todos/${todoToDeleteID}`);
+  public static async delete(id: number): Promise<void> {
+    await axiosInstance.delete(`/todos/${id}`);
   }
 
   // TODO: there's no need to use await in this case, anyway you return a promise and the user uses await or .then
@@ -33,7 +27,7 @@ export default class TodoService {
     return data;
   }
 
-  public static async updateTodo(todoToUpdate: Todo): Promise<void> {
-    await axiosInstance.put(`/todos/${todoToUpdate.id}`, todoToUpdate);
+  public static async update(todo: Todo): Promise<void> {
+    await axiosInstance.put(`/todos/${todo.id}`, todo);
   }
 }
