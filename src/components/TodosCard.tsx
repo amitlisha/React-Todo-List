@@ -49,7 +49,8 @@ const TodosCard: FunctionComponent<IProps> = () => {
       // implement it in all files please
       // TODO: why using the words `FromServer`?
       try {
-        const todosFromServer: Array<Todo> = await TodoService.getTodos();
+        const todosFromServer: Array<Todo> = (await TodoService.getTodos())
+          .data;
         setTodos(
           // TODO: todosFromServer.map(todo => { - no need for explicit type
           todosFromServer.map((todo: Todo) => {
@@ -121,10 +122,12 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
   const handleTodoSubmit = async (todoText: string): Promise<void> => {
     try {
-      const newTodo: Todo = await TodoService.save({
-        text: todoText,
-        isCompleted: false,
-      });
+      const newTodo: Todo = (
+        await TodoService.save({
+          text: todoText,
+          isCompleted: false,
+        })
+      ).data;
 
       setTodos((oldArray) => [...oldArray, newTodo]);
     } catch (error) {
