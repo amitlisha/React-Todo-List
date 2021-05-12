@@ -1,15 +1,11 @@
 import { axiosInstance } from "./AxiosInstance";
 import Todo from "../models/Todo";
-import Swal from "sweetalert2";
 
 // TODO: there's no need to change it but I want you to read about why it's not recommended using expot default
 // ANSWER: I read, and I what I understood is that naming the imported entity everytime causes some problems, like refactoring
-// ore auto complete by IDE. Another problem is exporting big objects instead of dividing to smaller exports.
+// or auto complete by the IDE. Another problem is exporting big objects instead of dividing to smaller exports.
 
 export default class TodoService {
-  // TODO: please separate the initialization and configuration of axios from this TodoService.
-  // it is considered as a side effect, read about axios.create method and export it as `axiosInstance` that will be shared in the app.
-
   // TODO: no need to call the param `todoToSave` and or `saveTodo` method name,
   // we're already in save method in TodoService class.
   // keep in mind that naming conventions are important, don't add words that do not make the code clearer

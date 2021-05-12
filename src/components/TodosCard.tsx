@@ -8,6 +8,7 @@ import { Box } from "@material-ui/core";
 import TodoItem from "./TodoItem";
 import Todo from "../models/Todo";
 import List from "@material-ui/core/List";
+import Swal from "sweetalert2";
 
 import TodoService from "../services/TodoService";
 import { FilterState } from "../enums/FilterState";
@@ -47,19 +48,27 @@ const TodosCard: FunctionComponent<IProps> = () => {
       // TODO: remove all types that are not necessary, for example Array<Todo> can be inferred by typescript.
       // implement it in all files please
       // TODO: why using the words `FromServer`?
-      const todosFromServer: Array<Todo> = await TodoService.getTodos();
-      setTodos(
-        // TODO: todosFromServer.map(todo => { - no need for explicit type
-        todosFromServer.map((todo: Todo) => {
-          return {
-            ...todo,
-            // TODO: this is not a solution, it is error prone and is not used as needed
-            // if the type really is date or undefined (which should not be if you look at the comment in the Todo.ts file), then I would expect something like this:
-            // deadlineTime: todo.deadlineTime,
-            deadlineTime: new Date((todo.deadlineTime as unknown) as string),
-          };
-        })
-      );
+      try {
+        const todosFromServer: Array<Todo> = await TodoService.getTodos();
+        setTodos(
+          // TODO: todosFromServer.map(todo => { - no need for explicit type
+          todosFromServer.map((todo: Todo) => {
+            return {
+              ...todo,
+              // TODO: this is not a solution, it is error prone and is not used as needed
+              // if the type really is date or undefined (which should not be if you look at the comment in the Todo.ts file), then I would expect something like this:
+              // deadlineTime: todo.deadlineTime,
+              deadlineTime: new Date((todo.deadlineTime as unknown) as string),
+            };
+          })
+        );
+      } catch (error) {
+        Swal.fire({
+          title: "Something went wrong",
+          text: "The todos couldn't be fetched from the server",
+          icon: "error",
+        });
+      }
     };
 
     fetchTodos();
@@ -96,6 +105,7 @@ const TodosCard: FunctionComponent<IProps> = () => {
 
     // TODO: that's not efficient, you make http requests in loop,
     // what will happen if there are alot of todos?
+    // add error handling
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
       (todo) =>
         new Promise((resolve, reject) => {
@@ -110,41 +120,64 @@ const TodosCard: FunctionComponent<IProps> = () => {
   };
 
   const handleTodoSubmit = async (todoText: string): Promise<void> => {
-    const newTodo: Todo = await TodoService.saveTodo({
-      text: todoText,
-      isCompleted: false,
-    });
+    try {
+      const newTodo: Todo = await TodoService.saveTodo({
+        text: todoText,
+        isCompleted: false,
+      });
 
-    setTodos((oldArray) => [...oldArray, newTodo]);
+      setTodos((oldArray) => [...oldArray, newTodo]);
+    } catch (error) {
+      Swal.fire({
+        title: "Something went wrong",
+        text: "The todo couldn't be added",
+        icon: "error",
+      });
+    }
   };
 
   const handleTodoDelete = async (todoToDeleteID: number): Promise<void> => {
-    // TODO: what happens if the deleteTodo request fails? you still delete it in the UI and will make your application inconsistent with the db
-    setTodos((oldArray) =>
-      oldArray.filter((currTodo) => currTodo.id !== todoToDeleteID)
-    );
+    try {
+      await TodoService.deleteTodo(todoToDeleteID);
 
-    await TodoService.deleteTodo(todoToDeleteID);
+      setTodos((oldArray) =>
+        oldArray.filter((currTodo) => currTodo.id !== todoToDeleteID)
+      );
+    } catch (error) {
+      Swal.fire({
+        title: "Something went wrong",
+        text: "The todo couldn't be deleted",
+        icon: "error",
+      });
+    }
   };
 
   const handleTodoUpdate = async (todoToUpdate: Todo): Promise<void> => {
     // TODO: your application is based on todos list, which can turn out to be huge.
     // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
     // hint: you can do the replacement in O(1)
-    setTodos((oldArray) =>
-      oldArray.map((todo) =>
-        todo.id === todoToUpdate.id ? todoToUpdate : todo
-      )
-    );
+    try {
+      await TodoService.updateTodo(todoToUpdate);
 
-    await TodoService.updateTodo(todoToUpdate);
+      setTodos((oldArray) =>
+        oldArray.map((todo) =>
+          todo.id === todoToUpdate.id ? todoToUpdate : todo
+        )
+      );
+    } catch (error) {
+      Swal.fire({
+        title: "Something went wrong",
+        text: "The todo couldn't be updated",
+        icon: "error",
+      });
+    }
   };
 
   const handleFilterChange = (
     event: React.MouseEvent<HTMLElement>,
     newFilter: string
   ) => {
-    // TODO: 
+    // TODO:
     setFilterTodos(newFilter);
   };
 
