@@ -14,6 +14,8 @@ export default class TodoService {
 
   // TODO: please notice that delete of multiple todos at once is not supported.
   // no need to implement as long as you're aware of the problem with the UX.
+  // ANSWER: yeah i'm aware of this, json-server doesn't support the deletion of multiple rows
+  // so I didn't wan't to put the logic of deleting multiple todos in here so I implemented it in the component because I only use it once.
   public static async delete(id: number): Promise<void> {
     await axiosInstance.delete(`/todos/${id}`);
   }
