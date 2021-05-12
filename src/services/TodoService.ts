@@ -24,7 +24,7 @@ export default class TodoService {
   // TODO: please use `noImplicitAny` in tsconfig.json file and look at the errors. in this case you don't use the type safety TS provides.
   public static async getTodos(): Promise<Array<Todo>> {
     // TODO: no need to use `` format if you don't use params, make your conventions consistent all across the application.
-    const { data } = await axiosInstance.get(`/todos`);
+    const { data } = await axiosInstance.get("/todos");
 
     return data;
   }
