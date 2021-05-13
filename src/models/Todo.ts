@@ -1,7 +1,8 @@
-// TODO: optional properties should come last and shouldn't be mixed with mandatory properties
 export default class Todo {
   // TODO: how can id be optional?
-  id?: number;
+  // ANSWER: You're right, but I did it because I had a situation where I have a Todo without id
+  // before I send it to the server. but I found a better way to do it with Omit
+  id!: number;
   text!: string;
   // TODO: why is it mandatory? fields like this should have default value.
   // think about the case when you create a new todo, it is not completed by default

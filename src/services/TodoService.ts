@@ -7,7 +7,9 @@ import { AxiosResponse } from "axios";
 // or auto complete by the IDE. Another problem is exporting big objects instead of dividing to smaller exports.
 
 export default class TodoService {
-  public static async save(todo: Todo): Promise<AxiosResponse<Todo>> {
+  public static async save(
+    todo: Omit<Todo, "id">
+  ): Promise<AxiosResponse<Todo>> {
     return axiosInstance.post(`/todos`, todo);
   }
 
