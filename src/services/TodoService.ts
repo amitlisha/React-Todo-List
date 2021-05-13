@@ -19,8 +19,13 @@ export default class TodoService {
     await axiosInstance.delete(`/todos/${id}`);
   }
 
-  // TODO: there's no need to use await in this case, anyway you return a promise and the user uses await or .then
   // TODO: please use `noImplicitAny` in tsconfig.json file and look at the errors. in this case you don't use the type safety TS provides.
+  // ANSWER: I added it to tsconfig, but it didn't put an error up on the function, I don't fully understand why it didn't throw an error
+  // I have an assumption but i'm not really sure, I would be happy if you could address it
+  // public static async getTodos(): Promise<Array<Todo>> {
+  //   const { data } = await axios.get(`/todos`);
+  //   return data;
+  // }
   public static async getTodos(): Promise<AxiosResponse<Array<Todo>>> {
     return axiosInstance.get("/todos");
   }
