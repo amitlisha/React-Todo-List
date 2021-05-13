@@ -9,8 +9,8 @@ import TextField from "@material-ui/core/TextField";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import React, { FunctionComponent, useState } from "react";
-import Todo from "../models/Todo";
-import "../styles/TodoItem.css";
+import Todo from "../../../models/Todo";
+import "./TodoItem.css";
 
 interface IProps {
   todo: Todo;

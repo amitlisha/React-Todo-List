@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import TodosCard from "./components/TodosCard";
+import TodosCard from "./components/Card/TodosCard";
 
 function App() {
   return (

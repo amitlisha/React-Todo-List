@@ -1,17 +1,17 @@
 import React, { FunctionComponent, useState, useEffect, useMemo } from "react";
 import S from "sanctuary";
-import TodoInput from "./TodoInput";
-import Modals from "./Modals";
-import CardFooter from "./CardFooter";
+import TodoInput from "../TodoInput";
+import Modals from "../../shared/Modals";
+import CardFooter from "../Footer/CardFooter";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
-import TodoItem from "./TodoItem";
-import Todo from "../models/Todo";
+import TodoItem from "../TodoItem";
+import Todo from "../../../models/Todo";
 import List from "@material-ui/core/List";
 import Swal from "sweetalert2";
 
-import TodoService from "../services/TodoService";
-import { FilterState } from "../enums/FilterState";
+import TodoService from "../../../services/TodoService";
+import { FilterState } from "../../../enums/FilterState";
 
 // TODO: this convention of starting with I[interface_name] is not in use any more,
 // if you want to read more about it, it's called hungarian notation (https://developer.okta.com/blog/2019/06/25/iinterface-considered-harmful)

@@ -5,7 +5,7 @@ import MomentUtils from "@date-io/moment";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import React, { FunctionComponent, useState, useEffect } from "react";
-import Todo from "../models/Todo";
+import Todo from "../../../models/Todo";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { Moment } from "moment";

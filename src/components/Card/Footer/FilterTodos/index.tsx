@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
-import { FilterState } from "../enums/FilterState";
+import { FilterState } from "../../../../enums/FilterState";
 
 interface IProps {
   filterTodos: string;

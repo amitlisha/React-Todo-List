@@ -2,7 +2,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import React, { FunctionComponent } from "react";
-import Todo from "../models/Todo";
+import Todo from "../../../models/Todo";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
