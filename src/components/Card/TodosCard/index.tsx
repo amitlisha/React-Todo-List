@@ -18,24 +18,18 @@ interface Props {}
 const TodosCard: FunctionComponent<Props> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   const [filterTodos, setFilterTodos] = useState<string>(FilterState.ALL);
-  // TODO: please think of better names than expiredTodo and this.
-  // does the word current really add any information?
-  const [todoToUpdate, setCurrentTodoToUpdate] = useState<Todo>();
-  const [expiredTodo, setCurrentTodoDeadline] = useState<Todo>();
-  // TODO: follow the naming convention, if you've named it `isTimeModalOpen`, then the setter should be called accordingly
-  // TODO: please let typescript infer the types it can by itself. for example, you pass false as default value - typescript knows it's a boolean, there's no need to usd it explicitly
-  const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
-  const [isDeadlineModalOpen, setDeadlineModal] = useState<boolean>(false);
+  const [todoToUpdate, setTodoToUpdate] = useState<Todo>();
+  const [expiredTodo, setExpiredTodo] = useState<Todo>();
+  const [isTimeModalOpen, setTimeModalState] = useState(false);
+  const [isDeadlineModalOpen, setDeadlineModalState] = useState(false);
   const remaindersWorker = useMemo(
     () => new Worker("/workers/RemaindersWorker.js"),
     []
   );
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
-    // TODO: please notice that the method (and it's variable) are called todoDeadline which implies on time type, whereas you actually excpect a todo object.
-    // this is a pitfall for confusion and not readable.
-    setCurrentTodoDeadline(todos.find((todo: Todo) => todo.id === event.data));
-    setDeadlineModal(true);
+    setExpiredTodo(todos.find((todo: Todo) => todo.id === event.data));
+    setDeadlineModalState(true);
   };
 
   // TODO: please think about what could happen if the component will unmount before the response is returned from the server
@@ -63,10 +57,10 @@ const TodosCard: FunctionComponent<Props> = () => {
     remaindersWorker.postMessage(todos);
   }, [todos, remaindersWorker]);
 
-  // TODO: remove return type
-  const getNumberOfUncompletedTodos = (): number => {
+  const getNumberOfUncompletedTodos = () => {
     // TODO: remove unused parentheses
-    return todos.filter((todo) => !todo.isCompleted).length;
+    // ANSWER: It's because of my prettier config.. I changed it
+    return todos.filter(todo => !todo.isCompleted).length;
   };
 
   const clearAllCompleted = (): void => {
@@ -92,7 +86,7 @@ const TodosCard: FunctionComponent<Props> = () => {
     // what will happen if there are alot of todos?
     // add error handling
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
-      (todo) =>
+      todo =>
         new Promise((resolve, reject) => {
           TodoService.delete(todo.id as number);
           resolve();
@@ -113,7 +107,7 @@ const TodosCard: FunctionComponent<Props> = () => {
         })
       ).data;
 
-      setTodos((oldArray) => [...oldArray, newTodo]);
+      setTodos(oldArray => [...oldArray, newTodo]);
     } catch (error) {
       Swal.fire({
         title: "Something went wrong",
@@ -127,8 +121,8 @@ const TodosCard: FunctionComponent<Props> = () => {
     try {
       await TodoService.delete(todoToDeleteID);
 
-      setTodos((oldArray) =>
-        oldArray.filter((currTodo) => currTodo.id !== todoToDeleteID)
+      setTodos(oldArray =>
+        oldArray.filter(currTodo => currTodo.id !== todoToDeleteID)
       );
     } catch (error) {
       Swal.fire({
@@ -146,8 +140,8 @@ const TodosCard: FunctionComponent<Props> = () => {
     try {
       await TodoService.update(todoToUpdate);
 
-      setTodos((oldArray) =>
-        oldArray.map((todo) =>
+      setTodos(oldArray =>
+        oldArray.map(todo =>
           todo.id === todoToUpdate.id ? todoToUpdate : todo
         )
       );
@@ -197,8 +191,8 @@ const TodosCard: FunctionComponent<Props> = () => {
                   onTodoUpdate={handleTodoUpdate}
                   // TODO: is there a reason why this one is anonymous?
                   openTimeModal={() => {
-                    setTimeModal(true);
-                    setCurrentTodoToUpdate({ ...todoToMap });
+                    setTimeModalState(true);
+                    setTodoToUpdate({ ...todoToMap });
                   }}
                 />
               )),
@@ -219,8 +213,8 @@ const TodosCard: FunctionComponent<Props> = () => {
         expiredTodo={expiredTodo as Todo}
         todoToUpdate={todoToUpdate as Todo}
         handleTodoUpdate={handleTodoUpdate}
-        onTimeModalClose={() => setTimeModal(false)}
-        onDeadlineModalClose={() => setDeadlineModal(false)}
+        onTimeModalClose={() => setTimeModalState(false)}
+        onDeadlineModalClose={() => setDeadlineModalState(false)}
       />
     </div>
   );
