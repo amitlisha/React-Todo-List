@@ -12,7 +12,7 @@ import React, { FunctionComponent, useState } from "react";
 import Todo from "../../../models/Todo";
 import styles from "./TodoItem.module.css";
 
-interface IProps {
+interface Props {
   todo: Todo;
   onDelete: (todoToDeleteID: number) => void;
   onTodoUpdate: (todoToUpdate: Todo) => void;
@@ -20,7 +20,7 @@ interface IProps {
 }
 
 // TODO: read about React.memo() and implement across the application (think wisely where it should be implemented and why it's not always recommended to use it)
-const TodoItem: FunctionComponent<IProps> = ({
+const TodoItem: FunctionComponent<Props> = ({
   todo,
   onDelete,
   onTodoUpdate,

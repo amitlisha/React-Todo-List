@@ -2,11 +2,11 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import React, { FunctionComponent, useState } from "react";
 
-interface IProps {
+interface Props {
   onSubmit: (todoText: string) => void;
 }
 
-const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
+const TodoInput: FunctionComponent<Props> = ({ onSubmit }) => {
   const [inputText, setInputText] = useState<string>("");
 
   const handleInputSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {

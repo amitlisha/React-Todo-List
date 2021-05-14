@@ -7,14 +7,14 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 
-interface IProps {
+interface Props {
   handleClose: () => void;
   isOpen: boolean;
   todo: Todo;
   updateTodoState: (updatedTodo: Todo) => void;
 }
 
-const CompleteTodoModal: FunctionComponent<IProps> = ({
+const CompleteTodoModal: FunctionComponent<Props> = ({
   handleClose,
   isOpen,
   todo,

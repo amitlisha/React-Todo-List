@@ -4,7 +4,7 @@ import React, { FunctionComponent } from "react";
 import FilterTodos from "../FilterTodos";
 import ClearCompleted from "../ClearCompleted";
 import Card from "@material-ui/core/Card";
-interface IProps {
+interface Props {
   // TODO: name is misleading, rename to indicate it's real purpose
   filterTodos: string;
   numberOfUncompletedTodos: number;
@@ -15,7 +15,7 @@ interface IProps {
   clearAllCompleted: () => void;
 }
 
-const CardFooter: FunctionComponent<IProps> = ({
+const CardFooter: FunctionComponent<Props> = ({
   filterTodos,
   numberOfUncompletedTodos,
   handleFilterChange,

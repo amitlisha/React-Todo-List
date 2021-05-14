@@ -15,9 +15,9 @@ import { FilterState } from "../../../enums/FilterState";
 
 // TODO: this convention of starting with I[interface_name] is not in use any more,
 // if you want to read more about it, it's called hungarian notation (https://developer.okta.com/blog/2019/06/25/iinterface-considered-harmful)
-interface IProps {}
+interface Props {}
 
-const TodosCard: FunctionComponent<IProps> = () => {
+const TodosCard: FunctionComponent<Props> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
   // TODO: why not using FilterState enum?
   const [filterTodos, setFilterTodos] = useState<string>("all");

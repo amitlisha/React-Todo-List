@@ -3,12 +3,12 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import { FilterState } from "../../../../enums/FilterState";
 
-interface IProps {
+interface Props {
   filterTodos: string;
   onChange: (event: React.MouseEvent<HTMLElement>, newFilter: string) => void;
 }
 
-const FilterTodos: FunctionComponent<IProps> = ({ filterTodos, onChange }) => {
+const FilterTodos: FunctionComponent<Props> = ({ filterTodos, onChange }) => {
   return (
     <ToggleButtonGroup
       size="small"

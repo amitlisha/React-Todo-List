@@ -10,14 +10,14 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { Moment } from "moment";
 
-interface IProps {
+interface Props {
   handleClose: () => void;
   isOpen: boolean;
   todo: Todo;
   updateTodoTime: (updatedTodo: Todo) => void;
 }
 
-const TimePickModal: FunctionComponent<IProps> = ({
+const TimePickModal: FunctionComponent<Props> = ({
   handleClose,
   isOpen,
   todo,
