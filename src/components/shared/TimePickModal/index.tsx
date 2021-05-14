@@ -23,10 +23,10 @@ const TimePickModal: FunctionComponent<IProps> = ({
   todo,
   updateTodoTime,
 }) => {
-  const [newDate, setNewDate] = useState<Date>(todo.deadlineTime as Date);
+  const [newDate, setNewDate] = useState<number>(todo.deadlineTime as number);
 
   useEffect(() => {
-    setNewDate(todo.deadlineTime as Date);
+    setNewDate(todo.deadlineTime as number);
   }, [todo]);
 
   const handleUpdateSubmit = () => {
@@ -44,7 +44,7 @@ const TimePickModal: FunctionComponent<IProps> = ({
             inputVariant="outlined"
             value={newDate}
             onChange={(date: MaterialUiPickersDate) =>
-              setNewDate((date as Moment).toDate())
+              setNewDate((date as Moment).valueOf())
             }
             style={{ margin: "0 auto", display: "flex" }}
           />

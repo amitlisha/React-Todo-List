@@ -47,22 +47,9 @@ const TodosCard: FunctionComponent<IProps> = () => {
     const fetchTodos = async () => {
       // TODO: remove all types that are not necessary, for example Array<Todo> can be inferred by typescript.
       // implement it in all files please
-      // TODO: why using the words `FromServer`?
       try {
-        const todosFromServer: Array<Todo> = (await TodoService.getTodos())
-          .data;
-        setTodos(
-          // TODO: todosFromServer.map(todo => { - no need for explicit type
-          todosFromServer.map((todo: Todo) => {
-            return {
-              ...todo,
-              // TODO: this is not a solution, it is error prone and is not used as needed
-              // if the type really is date or undefined (which should not be if you look at the comment in the Todo.ts file), then I would expect something like this:
-              // deadlineTime: todo.deadlineTime,
-              deadlineTime: new Date((todo.deadlineTime as unknown) as string),
-            };
-          })
-        );
+        const todos = (await TodoService.getTodos()).data;
+        setTodos(todos);
       } catch (error) {
         Swal.fire({
           title: "Something went wrong",
