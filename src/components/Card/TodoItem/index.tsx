@@ -10,7 +10,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import React, { FunctionComponent, useState } from "react";
 import Todo from "../../../models/Todo";
-import "./TodoItem.css";
+import styles from "./TodoItem.module.css";
 
 interface IProps {
   todo: Todo;
@@ -60,7 +60,7 @@ const TodoItem: FunctionComponent<IProps> = ({
 
   return (
     <ClickAwayListener onClickAway={handleClickOutside}>
-      <div className="todo-item">
+      <div className={styles.todoItem}>
         <ListItem dense button divider onDoubleClick={enableEdit}>
           <ListItemIcon>
             <Checkbox
@@ -83,7 +83,7 @@ const TodoItem: FunctionComponent<IProps> = ({
               primary={todo.text}
             />
           )}
-          <ListItemSecondaryAction className="secondary-buttons">
+          <ListItemSecondaryAction className={styles.secondaryButtons}>
             <IconButton
               edge="end"
               aria-label="time"
