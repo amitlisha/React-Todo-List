@@ -13,18 +13,15 @@ import Swal from "sweetalert2";
 import TodoService from "../../../services/TodoService";
 import { FilterState } from "../../../enums/FilterState";
 
-// TODO: this convention of starting with I[interface_name] is not in use any more,
-// if you want to read more about it, it's called hungarian notation (https://developer.okta.com/blog/2019/06/25/iinterface-considered-harmful)
 interface Props {}
 
 const TodosCard: FunctionComponent<Props> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
-  // TODO: why not using FilterState enum?
-  const [filterTodos, setFilterTodos] = useState<string>("all");
-  // TODO: please think of better names than currentTodoDeadline and this.
+  const [filterTodos, setFilterTodos] = useState<string>(FilterState.ALL);
+  // TODO: please think of better names than expiredTodo and this.
   // does the word current really add any information?
-  const [currentTodoToUpdate, setCurrentTodoToUpdate] = useState<Todo>();
-  const [currentTodoDeadline, setCurrentTodoDeadline] = useState<Todo>();
+  const [todoToUpdate, setCurrentTodoToUpdate] = useState<Todo>();
+  const [expiredTodo, setCurrentTodoDeadline] = useState<Todo>();
   // TODO: follow the naming convention, if you've named it `isTimeModalOpen`, then the setter should be called accordingly
   // TODO: please let typescript infer the types it can by itself. for example, you pass false as default value - typescript knows it's a boolean, there's no need to usd it explicitly
   const [isTimeModalOpen, setTimeModal] = useState<boolean>(false);
@@ -219,8 +216,8 @@ const TodosCard: FunctionComponent<Props> = () => {
       <Modals
         isTimeModalOpen={isTimeModalOpen}
         isDeadlineModalOpen={isDeadlineModalOpen}
-        currentTodoDeadline={currentTodoDeadline as Todo}
-        currentTodoToUpdate={currentTodoToUpdate as Todo}
+        expiredTodo={expiredTodo as Todo}
+        todoToUpdate={todoToUpdate as Todo}
         handleTodoUpdate={handleTodoUpdate}
         onTimeModalClose={() => setTimeModal(false)}
         onDeadlineModalClose={() => setDeadlineModal(false)}

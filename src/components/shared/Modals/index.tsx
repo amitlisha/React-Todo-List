@@ -5,9 +5,9 @@ import CompleteTodoModal from "../CompleteTodoModal";
 
 interface Props {
   isTimeModalOpen: boolean;
-  currentTodoToUpdate: Todo;
+  todoToUpdate: Todo;
   isDeadlineModalOpen: boolean;
-  currentTodoDeadline: Todo;
+  expiredTodo: Todo;
   handleTodoUpdate: (todoToUpdate: Todo) => Promise<void>;
   onTimeModalClose: () => void;
   onDeadlineModalClose: () => void;
@@ -18,28 +18,28 @@ interface Props {
 // hint: extract it into different modals and I want you to explain why this implementation is wrong is aspect of design and performance issues with react life cycles
 const Modals: FunctionComponent<Props> = ({
   isTimeModalOpen,
-  currentTodoDeadline,
+  todoToUpdate,
   isDeadlineModalOpen,
-  currentTodoToUpdate,
+  expiredTodo,
   handleTodoUpdate,
   onTimeModalClose,
   onDeadlineModalClose,
 }) => {
   return (
     <div>
-      {currentTodoToUpdate && (
+      {todoToUpdate && (
         <TimePickModal
           isOpen={isTimeModalOpen}
           handleClose={onTimeModalClose}
-          todo={currentTodoToUpdate}
+          todo={todoToUpdate}
           updateTodoTime={handleTodoUpdate}
         ></TimePickModal>
       )}
-      {currentTodoDeadline && (
+      {expiredTodo && (
         <CompleteTodoModal
           isOpen={isDeadlineModalOpen}
           handleClose={onDeadlineModalClose}
-          todo={currentTodoDeadline}
+          todo={expiredTodo}
           updateTodoState={handleTodoUpdate}
         ></CompleteTodoModal>
       )}
