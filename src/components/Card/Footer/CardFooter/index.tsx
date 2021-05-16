@@ -46,7 +46,7 @@ const CardFooter: FunctionComponent<Props> = ({
         <Grid item xs={4}>
           {/* QUESTION: */}
           {/* ClearCompletedButton will be rerendered every time todos array is changed, because onClear useCallback has to have todos in his deps array */}
-          {/* so is it worth it to use React.memo here and in FilterTodos? I'm not really sure */}
+          {/* so is it worth it to use React.memo here? I'm not really sure */}
           <ClearCompletedButton onClear={clearAllCompleted} />
         </Grid>
       </Grid>
