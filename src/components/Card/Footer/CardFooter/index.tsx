@@ -6,7 +6,7 @@ import ClearCompleted from "../ClearCompleted";
 import Card from "@material-ui/core/Card";
 interface Props {
   // TODO: name is misleading, rename to indicate it's real purpose
-  filterTodos: string;
+  todosFilter: string;
   numberOfUncompletedTodos: number;
   handleFilterChange: (
     event: React.MouseEvent<HTMLElement>,
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const CardFooter: FunctionComponent<Props> = ({
-  filterTodos,
+  todosFilter,
   numberOfUncompletedTodos,
   handleFilterChange,
   clearAllCompleted,
@@ -40,7 +40,7 @@ const CardFooter: FunctionComponent<Props> = ({
         </Grid>
         <Grid item xs={4}>
           <FilterTodos
-            filterTodos={filterTodos}
+            todosFilter={todosFilter}
             onChange={handleFilterChange}
           />
         </Grid>

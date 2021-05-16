@@ -23,7 +23,7 @@ interface Props {}
 
 const TodosCard: FunctionComponent<Props> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
-  const [filterTodos, setFilterTodos] = useState<string>(Filter.ALL);
+  const [todosFilter, setTodosFilter] = useState<string>(Filter.ALL);
   const [todoToUpdate, setTodoToUpdate] = useState<Todo>();
   const [expiredTodo, setExpiredTodo] = useState<Todo>();
   const [isTimeModalOpen, setTimeModalState] = useState(false);
@@ -161,16 +161,16 @@ const TodosCard: FunctionComponent<Props> = () => {
     newFilter: string
   ) => {
     // TODO:
-    setFilterTodos(newFilter);
+    setTodosFilter(newFilter);
   };
 
   // TODO: the name doesn't imply boolean result, but a filter action - rename
   // ANSWER: I don't what is better "toShowTodo" or "isTodoFiltered"
   const toShowTodo = (todoToFilter: Todo): boolean => {
-    return filterTodos === Filter.ALL
+    return todosFilter === Filter.ALL
       ? true
       : (todoToFilter.isCompleted ? Filter.COMPLETED : Filter.ACTIVE) ===
-          filterTodos;
+          todosFilter;
   };
 
   const openTimeModal = (todo: Todo) => {
@@ -206,7 +206,7 @@ const TodosCard: FunctionComponent<Props> = () => {
             ])(todos)}
           </List>
           <CardFooter
-            filterTodos={filterTodos}
+            todosFilter={todosFilter}
             numberOfUncompletedTodos={useMemo(getNumberOfUncompletedTodos, [
               todos,
             ])}

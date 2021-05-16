@@ -4,16 +4,16 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import { Filter } from "../../../../enums/Filter";
 
 interface Props {
-  filterTodos: string;
+  todosFilter: string;
   onChange: (event: React.MouseEvent<HTMLElement>, newFilter: string) => void;
 }
 
-const FilterTodos: FunctionComponent<Props> = ({ filterTodos, onChange }) => {
+const FilterTodos: FunctionComponent<Props> = ({ todosFilter, onChange }) => {
   return (
     <ToggleButtonGroup
       size="small"
       exclusive
-      value={filterTodos}
+      value={todosFilter}
       onChange={onChange}
     >
       <ToggleButton value={Filter.ALL}>All</ToggleButton>
