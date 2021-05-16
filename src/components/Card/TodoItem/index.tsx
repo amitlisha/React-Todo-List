@@ -105,4 +105,4 @@ const TodoItem: FunctionComponent<Props> = ({
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);

@@ -19,6 +19,14 @@ import Swal from "sweetalert2";
 import TodoService from "../../../services/TodoService";
 import { Filter } from "../../../enums/Filter";
 
+const fireSwalError = (text: string) => {
+  Swal.fire({
+    title: "Something went wrong",
+    text,
+    icon: "error",
+  });
+};
+
 interface Props {}
 
 const TodosCard: FunctionComponent<Props> = () => {
@@ -48,11 +56,7 @@ const TodosCard: FunctionComponent<Props> = () => {
         const todos = (await TodoService.getTodos()).data;
         setTodos(todos);
       } catch (error) {
-        Swal.fire({
-          title: "Something went wrong",
-          text: "The todos couldn't be fetched from the server",
-          icon: "error",
-        });
+        fireSwalError("The todos couldn't be fetched from the server");
       }
     };
 
@@ -69,7 +73,7 @@ const TodosCard: FunctionComponent<Props> = () => {
     return todos.filter(todo => !todo.isCompleted).length;
   };
 
-  const clearAllCompleted = (): void => {
+  const clearAllCompleted = useCallback((): void => {
     const [completedTodos, unCompletedTodos] = todos.reduce<Todo[][]>(
       (accumulator, todo) => {
         accumulator[todo.isCompleted ? 0 : 1].push(todo);
@@ -92,77 +96,78 @@ const TodosCard: FunctionComponent<Props> = () => {
         })
     );
 
-    setTodos(unCompletedTodos);
-    // Good job using Promise.all
-    Promise.all(deleteTodosPromises);
-  };
-
-  const handleTodoSubmit = async (todoText: string): Promise<void> => {
     try {
-      const newTodo: Todo = (
-        await TodoService.save({
-          text: todoText,
-          isCompleted: false,
-        })
-      ).data;
-
-      setTodos(oldArray => [...oldArray, newTodo]);
+      setTodos(unCompletedTodos);
+      // Good job using Promise.all
+      Promise.all(deleteTodosPromises);
     } catch (error) {
-      Swal.fire({
-        title: "Something went wrong",
-        text: "The todo couldn't be added",
-        icon: "error",
-      });
+      fireSwalError("The todos couldn't be deleted");
     }
-  };
+  }, [todos]);
 
-  const handleTodoDelete = async (todoToDeleteID: number): Promise<void> => {
-    try {
-      await TodoService.delete(todoToDeleteID);
+  const handleTodoSubmit = useCallback(
+    async (todoText: string): Promise<void> => {
+      try {
+        const newTodo: Todo = (
+          await TodoService.save({
+            text: todoText,
+            isCompleted: false,
+          })
+        ).data;
 
-      setTodos(oldArray =>
-        oldArray.filter(currTodo => currTodo.id !== todoToDeleteID)
-      );
-    } catch (error) {
-      Swal.fire({
-        title: "Something went wrong",
-        text: "The todo couldn't be deleted",
-        icon: "error",
-      });
-    }
-  };
+        setTodos(oldArray => [...oldArray, newTodo]);
+      } catch (error) {
+        fireSwalError("The todo couldn't be added");
+      }
+    },
+    []
+  );
 
-  const handleTodoUpdate = async (todoToUpdate: Todo): Promise<void> => {
-    // TODO: your application is based on todos list, which can turn out to be huge.
-    // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
-    // hint: you can do the replacement in O(1)
-    // ANSWER: I didn't find a way to do it with O(1) complexity, I can to it with Binary Search
-    // and get O(log n) complexity. If the ids had equal jumps between each index
-    // than i'll a way to do it in O(1) but when deleting todos, I'll have unused ids.
-    try {
-      await TodoService.update(todoToUpdate);
+  const handleTodoDelete = useCallback(
+    async (todoToDeleteID: number): Promise<void> => {
+      try {
+        await TodoService.delete(todoToDeleteID);
 
-      setTodos(oldArray =>
-        oldArray.map(todo =>
-          todo.id === todoToUpdate.id ? todoToUpdate : todo
-        )
-      );
-    } catch (error) {
-      Swal.fire({
-        title: "Something went wrong",
-        text: "The todo couldn't be updated",
-        icon: "error",
-      });
-    }
-  };
+        setTodos(oldArray =>
+          oldArray.filter(currTodo => currTodo.id !== todoToDeleteID)
+        );
+      } catch (error) {
+        fireSwalError("The todo couldn't be deleted");
+      }
+    },
+    []
+  );
 
-  const handleFilterChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newFilter: string
-  ) => {
-    // TODO:
-    setTodosFilter(newFilter);
-  };
+  const handleTodoUpdate = useCallback(
+    async (todoToUpdate: Todo): Promise<void> => {
+      // TODO: your application is based on todos list, which can turn out to be huge.
+      // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
+      // hint: you can do the replacement in O(1)
+      // ANSWER: I didn't find a way to do it with O(1) complexity, I can to it with Binary Search
+      // and get O(log n) complexity. If the ids had equal jumps between each index
+      // than i'll a way to do it in O(1) but when deleting todos, I'll have unused ids.
+      try {
+        await TodoService.update(todoToUpdate);
+
+        setTodos(oldArray =>
+          oldArray.map(todo =>
+            todo.id === todoToUpdate.id ? todoToUpdate : todo
+          )
+        );
+      } catch (error) {
+        fireSwalError("The todo couldn't be updated");
+      }
+    },
+    []
+  );
+
+  const handleFilterChange = useCallback(
+    (event: React.MouseEvent<HTMLElement>, newFilter: string) => {
+      // TODO:
+      setTodosFilter(newFilter);
+    },
+    []
+  );
 
   // TODO: the name doesn't imply boolean result, but a filter action - rename
   // ANSWER: I don't what is better "toShowTodo" or "isTodoFiltered"
@@ -173,10 +178,10 @@ const TodosCard: FunctionComponent<Props> = () => {
           todosFilter;
   };
 
-  const openTimeModal = (todo: Todo) => {
+  const openTimeModal = useCallback((todo: Todo) => {
     setTimeModalState(true);
     setTodoToUpdate({ ...todo });
-  };
+  }, []);
 
   return (
     <React.Fragment>

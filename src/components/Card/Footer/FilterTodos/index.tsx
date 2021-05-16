@@ -23,4 +23,4 @@ const FilterTodos: FunctionComponent<Props> = ({ todosFilter, onChange }) => {
   );
 };
 
-export default FilterTodos;
+export default React.memo(FilterTodos);

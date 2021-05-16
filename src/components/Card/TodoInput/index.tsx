@@ -33,4 +33,4 @@ const TodoInput: FunctionComponent<Props> = ({ onSubmit }) => {
   );
 };
 
-export default TodoInput;
+export default React.memo(TodoInput);
