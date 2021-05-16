@@ -1,4 +1,10 @@
-import React, { FunctionComponent, useState, useEffect, useMemo } from "react";
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import S from "sanctuary";
 import TodoInput from "../TodoInput";
 import Modals from "../../shared/Modals";
@@ -64,26 +70,19 @@ const TodosCard: FunctionComponent<Props> = () => {
   };
 
   const clearAllCompleted = (): void => {
-    // TODO: please notice the changes using the types:
-    // const [completedTodos, unCompletedTodos] = todos.reduce<Todo[][]>(
-    //   (newArr, todo) => {
-    //     newArr[todo.isCompleted ? 0 : 1].push(todo);
-    //     return newArr;
-    //   },
-    //   [[], []]
-    // );|
-    const [completedTodos, unCompletedTodos] = todos.reduce(
-      // TODO: the convention is to call it `accumulator` instead of `newArr`.
-      // in general, the type of the collection/variable should not be included in the name itself.
-      (newArr, todo) => {
-        newArr[todo.isCompleted ? 0 : 1].push(todo);
-        return newArr;
+    const [completedTodos, unCompletedTodos] = todos.reduce<Todo[][]>(
+      (accumulator, todo) => {
+        accumulator[todo.isCompleted ? 0 : 1].push(todo);
+        return accumulator;
       },
-      [[], []] as Array<Array<Todo>>
+      [[], []]
     );
 
     // TODO: that's not efficient, you make http requests in loop,
     // what will happen if there are alot of todos?
+    // ANSWER: The http requests aren't made in a loop
+    // I create the array of promises so I could use Promise.all
+    // The http requests are only made when I call Promise.all
     // add error handling
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
       todo =>
@@ -137,6 +136,9 @@ const TodosCard: FunctionComponent<Props> = () => {
     // TODO: your application is based on todos list, which can turn out to be huge.
     // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
     // hint: you can do the replacement in O(1)
+    // ANSWER: I didn't find a way to do it with O(1) complexity, I can to it with Binary Search
+    // and get O(log n) complexity. If the ids had equal jumps between each index
+    // than i'll a way to do it in O(1) but when deleting todos, I'll have unused ids.
     try {
       await TodoService.update(todoToUpdate);
 
@@ -163,7 +165,8 @@ const TodosCard: FunctionComponent<Props> = () => {
   };
 
   // TODO: the name doesn't imply boolean result, but a filter action - rename
-  const filterTodo = (todoToFilter: Todo): boolean => {
+  // ANSWER: I don't what is better "toShowTodo" or "isTodoFiltered"
+  const toShowTodo = (todoToFilter: Todo): boolean => {
     return filterTodos === FilterState.ALL
       ? true
       : (todoToFilter.isCompleted
@@ -171,37 +174,44 @@ const TodosCard: FunctionComponent<Props> = () => {
           : FilterState.ACTIVE) === filterTodos;
   };
 
+  const openTimeModal = (todo: Todo) => {
+    setTimeModalState(true);
+    setTodoToUpdate({ ...todo });
+  };
+
   return (
-    // TODO: read about react fragment
-    <div>
+    <React.Fragment>
       <Box m="auto" width="50%">
         <Card>
           {/* TODO: please read about useCallback and redesign your code accordingly + I would like to ask you afterwards how it improves the performance of our application. */}
           <TodoInput onSubmit={handleTodoSubmit} />
           <List>
             {S.pipe([
-              S.filter(filterTodo),
-              S.map((todoToMap: Todo) => (
+              S.filter(toShowTodo),
+              S.map((todo: Todo) => (
                 // TODO: if you're not familiar with react reconcilation, then please read (https://reactjs.org/docs/reconciliation.html) + read about react diff alogirthm from the same source
                 // and explain why we need the `key` prop
+                // ANSWER: rendering a list isn't easy for react diff algorithm, if an element is added at the end of the list
+                // then it's easy, react diff algo will compare all elements and find out they are the same, but just one element was added to the end.
+                // When an element is added at the start of the list, react will have a hard time finding out that the rest of the elements are the same,
+                // and finding this out is pretty expensive. So a solution react came up with is binding a key to each element rendered from a list, that way
+                // react diff algo will be able to know if elements position just moved, or their state changed.
                 <TodoItem
-                  key={todoToMap.id}
-                  todo={todoToMap}
+                  key={todo.id}
+                  todo={todo}
                   onDelete={handleTodoDelete}
                   onTodoUpdate={handleTodoUpdate}
-                  // TODO: is there a reason why this one is anonymous?
-                  openTimeModal={() => {
-                    setTimeModalState(true);
-                    setTodoToUpdate({ ...todoToMap });
-                  }}
+                  openTimeModal={openTimeModal}
                 />
               )),
             ])(todos)}
           </List>
           <CardFooter
             filterTodos={filterTodos}
-            // TODO: use useMemo hook to prevent unnecessary rendering
-            numberOfUncompletedTodos={getNumberOfUncompletedTodos()}
+            numberOfUncompletedTodos={useMemo(
+              () => getNumberOfUncompletedTodos(),
+              [todos]
+            )}
             handleFilterChange={handleFilterChange}
             clearAllCompleted={clearAllCompleted}
           />
@@ -216,7 +226,7 @@ const TodosCard: FunctionComponent<Props> = () => {
         onTimeModalClose={() => setTimeModalState(false)}
         onDeadlineModalClose={() => setDeadlineModalState(false)}
       />
-    </div>
+    </React.Fragment>
   );
 };
 
