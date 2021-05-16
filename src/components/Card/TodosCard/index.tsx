@@ -17,13 +17,13 @@ import List from "@material-ui/core/List";
 import Swal from "sweetalert2";
 
 import TodoService from "../../../services/TodoService";
-import { FilterState } from "../../../enums/FilterState";
+import { Filter } from "../../../enums/Filter";
 
 interface Props {}
 
 const TodosCard: FunctionComponent<Props> = () => {
   const [todos, setTodos] = useState<Array<Todo>>([]);
-  const [filterTodos, setFilterTodos] = useState<string>(FilterState.ALL);
+  const [filterTodos, setFilterTodos] = useState<string>(Filter.ALL);
   const [todoToUpdate, setTodoToUpdate] = useState<Todo>();
   const [expiredTodo, setExpiredTodo] = useState<Todo>();
   const [isTimeModalOpen, setTimeModalState] = useState(false);
@@ -167,11 +167,10 @@ const TodosCard: FunctionComponent<Props> = () => {
   // TODO: the name doesn't imply boolean result, but a filter action - rename
   // ANSWER: I don't what is better "toShowTodo" or "isTodoFiltered"
   const toShowTodo = (todoToFilter: Todo): boolean => {
-    return filterTodos === FilterState.ALL
+    return filterTodos === Filter.ALL
       ? true
-      : (todoToFilter.isCompleted
-          ? FilterState.COMPLETED
-          : FilterState.ACTIVE) === filterTodos;
+      : (todoToFilter.isCompleted ? Filter.COMPLETED : Filter.ACTIVE) ===
+          filterTodos;
   };
 
   const openTimeModal = (todo: Todo) => {
@@ -208,10 +207,9 @@ const TodosCard: FunctionComponent<Props> = () => {
           </List>
           <CardFooter
             filterTodos={filterTodos}
-            numberOfUncompletedTodos={useMemo(
-              () => getNumberOfUncompletedTodos(),
-              [todos]
-            )}
+            numberOfUncompletedTodos={useMemo(getNumberOfUncompletedTodos, [
+              todos,
+            ])}
             handleFilterChange={handleFilterChange}
             clearAllCompleted={clearAllCompleted}
           />

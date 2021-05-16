@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
-import { FilterState } from "../../../../enums/FilterState";
+import { Filter } from "../../../../enums/Filter";
 
 interface Props {
   filterTodos: string;
@@ -16,9 +16,9 @@ const FilterTodos: FunctionComponent<Props> = ({ filterTodos, onChange }) => {
       value={filterTodos}
       onChange={onChange}
     >
-      <ToggleButton value={FilterState.ALL}>All</ToggleButton>
-      <ToggleButton value={FilterState.ACTIVE}>Active</ToggleButton>
-      <ToggleButton value={FilterState.COMPLETED}>Completed</ToggleButton>
+      <ToggleButton value={Filter.ALL}>All</ToggleButton>
+      <ToggleButton value={Filter.ACTIVE}>Active</ToggleButton>
+      <ToggleButton value={Filter.COMPLETED}>Completed</ToggleButton>
     </ToggleButtonGroup>
   );
 };
