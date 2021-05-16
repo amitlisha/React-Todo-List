@@ -1,24 +1,24 @@
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 import React, { FunctionComponent } from "react";
 
 interface Props {
   onClear: () => void;
 }
 
-// TODO: rename component, component should not be named as verbs
-const ClearCompletedButton: FunctionComponent<Props> = ({ onClear }) => {
-  // TODO: why do you need this method?
-  // TODO: this is one of the cases to use React.memo and deal with `onClear` accordingly
-  const handleClear = (event: React.MouseEvent<HTMLElement>) => {
-    onClear();
-  };
+const useStyles = makeStyles({
+  button: {
+    height: "100%",
+  },
+});
 
+const ClearCompletedButton: FunctionComponent<Props> = ({ onClear }) => {
+  const classes = useStyles();
   return (
-    // TODO: read about makeStyles of Mui and implement it just so you'd get familiar with it
-    <Button style={{ height: "100%" }} variant="outlined" onClick={handleClear}>
+    <Button className={classes.button} variant="outlined" onClick={onClear}>
       Clear completed
     </Button>
   );
 };
 
-export default ClearCompletedButton;
+export default React.memo(ClearCompletedButton);
