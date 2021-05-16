@@ -2,7 +2,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Grid from "@material-ui/core/Grid";
 import React, { FunctionComponent } from "react";
 import FilterTodos from "../FilterTodos";
-import ClearCompleted from "../ClearCompleted";
+import ClearCompletedButton from "../ClearCompletedButton";
 import Card from "@material-ui/core/Card";
 interface Props {
   // TODO: name is misleading, rename to indicate it's real purpose
@@ -45,7 +45,7 @@ const CardFooter: FunctionComponent<Props> = ({
           />
         </Grid>
         <Grid item xs={4}>
-          <ClearCompleted onClear={clearAllCompleted} />
+          <ClearCompletedButton onClear={clearAllCompleted} />
         </Grid>
       </Grid>
     </CardActions>

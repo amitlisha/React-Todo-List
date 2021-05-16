@@ -6,7 +6,7 @@ interface Props {
 }
 
 // TODO: rename component, component should not be named as verbs
-const ClearCompleted: FunctionComponent<Props> = ({ onClear }) => {
+const ClearCompletedButton: FunctionComponent<Props> = ({ onClear }) => {
   // TODO: why do you need this method?
   // TODO: this is one of the cases to use React.memo and deal with `onClear` accordingly
   const handleClear = (event: React.MouseEvent<HTMLElement>) => {
@@ -21,4 +21,4 @@ const ClearCompleted: FunctionComponent<Props> = ({ onClear }) => {
   );
 };
 
-export default ClearCompleted;
+export default ClearCompletedButton;
