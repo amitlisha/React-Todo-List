@@ -144,7 +144,7 @@ const TodosCard: FunctionComponent<Props> = () => {
       // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
       // hint: you can do the replacement in O(1)
       // ANSWER: I didn't find a way to do it with O(1) complexity, I can to it with Binary Search
-      // and get O(log n) complexity. If the ids had equal jumps between each index
+      // and get O(log n) complexity, if the ids had equal jumps between each index
       // than i'll a way to do it in O(1) but when deleting todos, I'll have unused ids.
       try {
         await TodoService.update(todoToUpdate);
@@ -163,7 +163,6 @@ const TodosCard: FunctionComponent<Props> = () => {
 
   const handleFilterChange = useCallback(
     (event: React.MouseEvent<HTMLElement>, newFilter: string) => {
-      // TODO:
       setTodosFilter(newFilter);
     },
     []
@@ -187,7 +186,6 @@ const TodosCard: FunctionComponent<Props> = () => {
     <React.Fragment>
       <Box m="auto" width="50%">
         <Card>
-          {/* TODO: please read about useCallback and redesign your code accordingly + I would like to ask you afterwards how it improves the performance of our application. */}
           <TodoInput onSubmit={handleTodoSubmit} />
           <List>
             {S.pipe([

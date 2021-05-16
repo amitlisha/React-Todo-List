@@ -5,7 +5,6 @@ import FilterTodos from "../FilterTodos";
 import ClearCompletedButton from "../ClearCompletedButton";
 import Card from "@material-ui/core/Card";
 interface Props {
-  // TODO: name is misleading, rename to indicate it's real purpose
   todosFilter: string;
   numberOfUncompletedTodos: number;
   handleFilterChange: (

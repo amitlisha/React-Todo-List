@@ -1,9 +1,3 @@
-// TODO: a general comment on the project structure.
-// I believe you worked on scaleable projects, if you did, do you think that 
-// the way this project tree is built, is scaleable?
-// There's no right or wrong, it what fits the application, but by experience of many programmers, there are some best practices that say that this approach is not a good one.
-// say for example, create styles folder and components folder: you should have created components folder and divide the components into sub folders which will contain their corresponding styles.
-// and create a shared components folder for things like TimePickModal component
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
