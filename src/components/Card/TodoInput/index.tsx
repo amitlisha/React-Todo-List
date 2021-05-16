@@ -7,7 +7,7 @@ interface Props {
 }
 
 const TodoInput: FunctionComponent<Props> = ({ onSubmit }) => {
-  const [inputText, setInputText] = useState<string>("");
+  const [inputText, setInputText] = useState("");
 
   const handleInputSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {

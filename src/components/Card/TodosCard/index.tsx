@@ -43,7 +43,7 @@ const TodosCard: FunctionComponent<Props> = () => {
   );
 
   remaindersWorker.onmessage = (event: MessageEvent) => {
-    setExpiredTodo(todos.find((todo: Todo) => todo.id === event.data));
+    setExpiredTodo(todos.find(todo => todo.id === event.data));
     setDeadlineModalState(true);
   };
 
@@ -51,8 +51,6 @@ const TodosCard: FunctionComponent<Props> = () => {
   // implement this solution (important)
   useEffect(() => {
     const fetchTodos = async () => {
-      // TODO: remove all types that are not necessary, for example Array<Todo> can be inferred by typescript.
-      // implement it in all files please
       try {
         const todos = (await TodoService.getTodos()).data;
         setTodos(todos);
@@ -92,7 +90,7 @@ const TodosCard: FunctionComponent<Props> = () => {
     const deleteTodosPromises: Array<Promise<void>> = completedTodos.map(
       todo =>
         new Promise((resolve, reject) => {
-          TodoService.delete(todo.id as number);
+          TodoService.delete(todo.id);
           resolve();
         })
     );

@@ -41,9 +41,7 @@ const TodoItem: FunctionComponent<Props> = ({
   };
 
   const handleTodoDelete = () => {
-    if (todo.id) {
-      onDelete(todo.id as number);
-    }
+    onDelete(todo.id);
   };
 
   const enableEdit = () => {
