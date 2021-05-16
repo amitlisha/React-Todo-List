@@ -7,7 +7,8 @@ import React, {
 } from "react";
 import S from "sanctuary";
 import TodoInput from "../TodoInput";
-import Modals from "../../shared/Modals";
+import CompleteTodoModal from "../../shared/CompleteTodoModal";
+import TimePickModal from "../../shared/TimePickModal";
 import CardFooter from "../Footer/CardFooter";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
@@ -218,15 +219,24 @@ const TodosCard: FunctionComponent<Props> = () => {
           />
         </Card>
       </Box>
-      <Modals
-        isTimeModalOpen={isTimeModalOpen}
-        isDeadlineModalOpen={isDeadlineModalOpen}
-        expiredTodo={expiredTodo as Todo}
-        todoToUpdate={todoToUpdate as Todo}
-        handleTodoUpdate={handleTodoUpdate}
-        onTimeModalClose={() => setTimeModalState(false)}
-        onDeadlineModalClose={() => setDeadlineModalState(false)}
-      />
+      {/* ANSWER: The pervious solution was wrong because at first it wasn't scalable, adding more modals means adding more props */}
+      {/* which in some point will be too much, second, every prop change will cause rerendering of all modals (although could be partially solved with React.memo). */}
+      {todoToUpdate && (
+        <TimePickModal
+          isOpen={isTimeModalOpen}
+          handleClose={() => setTimeModalState(false)}
+          todo={todoToUpdate}
+          updateTodoTime={handleTodoUpdate}
+        ></TimePickModal>
+      )}
+      {expiredTodo && (
+        <CompleteTodoModal
+          isOpen={isDeadlineModalOpen}
+          handleClose={() => setTimeModalState(false)}
+          todo={expiredTodo}
+          updateTodoState={handleTodoUpdate}
+        ></CompleteTodoModal>
+      )}
     </React.Fragment>
   );
 };

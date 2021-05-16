@@ -1,6 +1,6 @@
 export default interface Todo {
   // TODO: how can id be optional?
-  // ANSWER: You're right, but I did it because I had a situation where I have a Todo without id
+  // ANSWER: You're right, but I did it because I had a situation where I have a Todo without an id
   // before I send it to the server. Now I found a better way to do it with Omit
   id: number;
   text: string;
