@@ -149,7 +149,7 @@ const TodosCard: FunctionComponent<Props> = () => {
       // TODO: your application is based on todos list, which can turn out to be huge.
       // each update you do, requires O(n) time complexity, think of a more efficient way to implement it.
       // hint: you can do the replacement in O(1)
-      // ANSWER: Without changing the data structure I can to it with Binary Search and get O(log n) complexity.
+      // ANSWER: Without changing the data structure I can to it with Binary Search because the todos are ordered by id and get O(log n) complexity.
       // if I use the Map data structure and set the keys as the ids, I can get O(1) complexity
       // because Map.get is O(1). Is this the solution you intended?
       try {
