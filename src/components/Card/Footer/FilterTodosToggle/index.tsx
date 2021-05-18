@@ -8,7 +8,10 @@ interface Props {
   onChange: (event: React.MouseEvent<HTMLElement>, newFilter: string) => void;
 }
 
-const FilterTodos: FunctionComponent<Props> = ({ todosFilter, onChange }) => {
+const FilterTodosToggle: FunctionComponent<Props> = ({
+  todosFilter,
+  onChange,
+}) => {
   return (
     <ToggleButtonGroup
       size="small"
@@ -23,4 +26,4 @@ const FilterTodos: FunctionComponent<Props> = ({ todosFilter, onChange }) => {
   );
 };
 
-export default React.memo(FilterTodos);
+export default React.memo(FilterTodosToggle);

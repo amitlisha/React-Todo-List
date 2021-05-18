@@ -1,7 +1,7 @@
 import CardActions from "@material-ui/core/CardActions";
 import Grid from "@material-ui/core/Grid";
 import React, { FunctionComponent } from "react";
-import FilterTodos from "../FilterTodos";
+import FilterTodosToggle from "../FilterTodosToggle";
 import ClearCompletedButton from "../ClearCompletedButton";
 import Card from "@material-ui/core/Card";
 interface Props {
@@ -38,7 +38,7 @@ const CardFooter: FunctionComponent<Props> = ({
           </Card>
         </Grid>
         <Grid item xs={4}>
-          <FilterTodos
+          <FilterTodosToggle
             todosFilter={todosFilter}
             onChange={handleFilterChange}
           />
