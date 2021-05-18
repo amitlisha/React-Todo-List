@@ -49,6 +49,13 @@ const TodosCard: FunctionComponent<Props> = () => {
 
   // TODO: please think about what could happen if the component will unmount before the response is returned from the server
   // implement this solution (important)
+  // I researched and found three solutions to this problem:
+  // 1. Managing an isMounted property, that will be set to true when the component is mounted
+  // and will be set false in the useEffect return function, https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html - this article
+  // says that the deprecated isMounted function is an anti pattern and not recommended to use and they offer managing the isMounted property.
+  // 2. Another solution offered in this article is creating a warper for all promises, which makes the promise cancelable.
+  // 3. Third option is to move the todos array to Redux and then replacing the setState functions with dispatch.
+  // I'm not really sure what the best approach is, and would like your opinion.
   useEffect(() => {
     const fetchTodos = async () => {
       try {
