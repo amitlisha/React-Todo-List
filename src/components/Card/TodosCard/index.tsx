@@ -175,7 +175,7 @@ const TodosCard: FunctionComponent<Props> = () => {
   );
 
   // TODO: the name doesn't imply boolean result, but a filter action - rename
-  // ANSWER: I don't what is better "toShowTodo" or "isTodoFiltered"
+  // ANSWER: I'm not sure which is better "toShowTodo" or "isTodoFiltered"
   const toShowTodo = (todoToFilter: Todo): boolean => {
     return todosFilter === Filter.ALL
       ? true
