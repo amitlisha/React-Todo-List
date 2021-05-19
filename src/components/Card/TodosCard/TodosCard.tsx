@@ -6,13 +6,13 @@ import React, {
   useCallback,
 } from "react";
 import S from "sanctuary";
-import TodoInput from "../TodoInput";
-import CompleteTodoModal from "../../shared/CompleteTodoModal";
-import TimePickModal from "../../shared/TimePickModal";
-import CardFooter from "../Footer/CardFooter";
+import TodoInput from "../TodoInput/TodoInput";
+import CompleteTodoModal from "../../shared/CompleteTodoModal/CompleteTodoModal";
+import TimePickModal from "../../shared/TimePickModal/TimePickModal";
+import CardFooter from "../Footer/CardFooter/CardFooter";
 import Card from "@material-ui/core/Card";
 import { Box } from "@material-ui/core";
-import TodoItem from "../TodoItem";
+import TodoItem from "../TodoItem/TodoItem";
 import Todo from "../../../models/Todo";
 import List from "@material-ui/core/List";
 import Swal from "sweetalert2";

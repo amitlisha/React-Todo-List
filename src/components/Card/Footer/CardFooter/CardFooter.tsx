@@ -1,8 +1,8 @@
 import CardActions from "@material-ui/core/CardActions";
 import Grid from "@material-ui/core/Grid";
 import React, { FunctionComponent } from "react";
-import FilterTodosToggle from "../FilterTodosToggle";
-import ClearCompletedButton from "../ClearCompletedButton";
+import FilterTodosToggle from "../FilterTodosToggle/FilterTodosToggle";
+import ClearCompletedButton from "../ClearCompletedButton/ClearCompletedButton";
 import Card from "@material-ui/core/Card";
 interface Props {
   todosFilter: string;
