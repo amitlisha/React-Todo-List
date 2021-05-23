@@ -56,17 +56,26 @@ const TodosCard: FunctionComponent<Props> = () => {
   // 2. Another solution offered in this article is creating a warper for all promises, which makes the promise cancelable.
   // 3. Third option is to move the todos array to Redux and then replacing the setState functions with dispatch.
   // I'm not really sure what the best approach is, and would like your opinion.
+  // EDIT: I decided to go with managing my own isMounted after seeing Dan Abramov recommends this method.
+  // I actually found another option and it's using axios cancellation token.
   useEffect(() => {
+    let isMounted = true;
     const fetchTodos = async () => {
       try {
         const todos = (await TodoService.getTodos()).data;
-        setTodos(todos);
+        if (isMounted) {
+          setTodos(todos);
+        }
       } catch (error) {
         fireSwalError("The todos couldn't be fetched from the server");
       }
     };
 
     fetchTodos();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
