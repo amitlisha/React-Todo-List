@@ -65,6 +65,7 @@ const TodosCard: FunctionComponent<Props> = () => {
         const todos = (await TodoService.getTodos()).data;
         if (isMounted) {
           setTodos(todos);
+          remaindersWorker.postMessage({ type: "add", data: todos });
         }
       } catch (error) {
         fireSwalError("The todos couldn't be fetched from the server");
@@ -76,11 +77,7 @@ const TodosCard: FunctionComponent<Props> = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  useEffect(() => {
-    remaindersWorker.postMessage(todos);
-  }, [todos, remaindersWorker]);
+  }, [remaindersWorker]);
 
   const getNumberOfUncompletedTodos = () => {
     // TODO: remove unused parentheses
@@ -114,11 +111,15 @@ const TodosCard: FunctionComponent<Props> = () => {
     try {
       // Good job using Promise.all
       await Promise.all(deleteTodosPromises);
+      remaindersWorker.postMessage({
+        type: "delete",
+        data: completedTodos.map(todo => todo.id),
+      });
       setTodos(unCompletedTodos);
     } catch (error) {
       fireSwalError("The todos couldn't be deleted");
     }
-  }, [todos]);
+  }, [todos, remaindersWorker]);
 
   const handleTodoSubmit = useCallback(
     async (todoText: string): Promise<void> => {
@@ -130,18 +131,22 @@ const TodosCard: FunctionComponent<Props> = () => {
           })
         ).data;
 
+        remaindersWorker.postMessage({ type: "add", data: [newTodo] });
+
         setTodos(oldArray => [...oldArray, newTodo]);
       } catch (error) {
         fireSwalError("The todo couldn't be added");
       }
     },
-    []
+    [remaindersWorker]
   );
 
   const handleTodoDelete = useCallback(
     async (todoToDeleteID: number): Promise<void> => {
       try {
         await TodoService.delete(todoToDeleteID);
+
+        remaindersWorker.postMessage({ type: "delete", data: todoToDeleteID });
 
         setTodos(oldArray =>
           oldArray.filter(currTodo => currTodo.id !== todoToDeleteID)
@@ -150,7 +155,7 @@ const TodosCard: FunctionComponent<Props> = () => {
         fireSwalError("The todo couldn't be deleted");
       }
     },
-    []
+    [remaindersWorker]
   );
 
   const handleTodoUpdate = useCallback(
@@ -165,15 +170,24 @@ const TodosCard: FunctionComponent<Props> = () => {
         await TodoService.update(todoToUpdate);
 
         setTodos(oldArray =>
-          oldArray.map(todo =>
-            todo.id === todoToUpdate.id ? todoToUpdate : todo
-          )
+          oldArray.map(todo => {
+            if (todo.id === todoToUpdate.id) {
+              if (todo.deadlineTime !== todoToUpdate.deadlineTime) {
+                remaindersWorker.postMessage({
+                  type: "update",
+                  data: todoToUpdate,
+                });
+              }
+              return todoToUpdate;
+            }
+            return todo;
+          })
         );
       } catch (error) {
         fireSwalError("The todo couldn't be updated");
       }
     },
-    []
+    [remaindersWorker]
   );
 
   const handleFilterChange = useCallback(
@@ -246,7 +260,7 @@ const TodosCard: FunctionComponent<Props> = () => {
       {expiredTodo && (
         <CompleteTodoModal
           isOpen={isDeadlineModalOpen}
-          handleClose={() => setTimeModalState(false)}
+          handleClose={() => setDeadlineModalState(false)}
           todo={expiredTodo}
           updateTodoState={handleTodoUpdate}
         ></CompleteTodoModal>
