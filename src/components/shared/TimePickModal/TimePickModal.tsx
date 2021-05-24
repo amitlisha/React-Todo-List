@@ -5,28 +5,28 @@ import MomentUtils from "@date-io/moment";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import React, { FunctionComponent, useState, useEffect } from "react";
-import Todo from "../models/Todo";
+import Todo from "../../../models/Todo";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { Moment } from "moment";
 
-interface IProps {
+interface Props {
   handleClose: () => void;
   isOpen: boolean;
   todo: Todo;
   updateTodoTime: (updatedTodo: Todo) => void;
 }
 
-const TimePickModal: FunctionComponent<IProps> = ({
+const TimePickModal: FunctionComponent<Props> = ({
   handleClose,
   isOpen,
   todo,
   updateTodoTime,
 }) => {
-  const [newDate, setNewDate] = useState<Date>(todo.deadlineTime as Date);
+  const [newDate, setNewDate] = useState<number>(todo.deadlineTime as number);
 
   useEffect(() => {
-    setNewDate(todo.deadlineTime as Date);
+    setNewDate(todo.deadlineTime as number);
   }, [todo]);
 
   const handleUpdateSubmit = () => {
@@ -44,7 +44,7 @@ const TimePickModal: FunctionComponent<IProps> = ({
             inputVariant="outlined"
             value={newDate}
             onChange={(date: MaterialUiPickersDate) =>
-              setNewDate((date as Moment).toDate())
+              setNewDate((date as Moment).valueOf())
             }
             style={{ margin: "0 auto", display: "flex" }}
           />

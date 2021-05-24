@@ -2,12 +2,12 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import React, { FunctionComponent, useState } from "react";
 
-interface IProps {
+interface Props {
   onSubmit: (todoText: string) => void;
 }
 
-const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
-  const [inputText, setInputText] = useState<string>("");
+const TodoInput: FunctionComponent<Props> = ({ onSubmit }) => {
+  const [inputText, setInputText] = useState("");
 
   const handleInputSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -33,4 +33,4 @@ const TodoInput: FunctionComponent<IProps> = ({ onSubmit }) => {
   );
 };
 
-export default TodoInput;
+export default React.memo(TodoInput);

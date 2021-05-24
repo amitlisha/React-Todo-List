@@ -1,12 +1,11 @@
 import CardActions from "@material-ui/core/CardActions";
 import Grid from "@material-ui/core/Grid";
 import React, { FunctionComponent } from "react";
-import FilterTodos from "./FilterTodos";
-import ClearCompleted from "./ClearCompleted";
+import FilterTodosToggle from "../FilterTodosToggle/FilterTodosToggle";
+import ClearCompletedButton from "../ClearCompletedButton/ClearCompletedButton";
 import Card from "@material-ui/core/Card";
-interface IProps {
-  // TODO: name is misleading, rename to indicate it's real purpose
-  filterTodos: string;
+interface Props {
+  todosFilter: string;
   numberOfUncompletedTodos: number;
   handleFilterChange: (
     event: React.MouseEvent<HTMLElement>,
@@ -15,8 +14,8 @@ interface IProps {
   clearAllCompleted: () => void;
 }
 
-const CardFooter: FunctionComponent<IProps> = ({
-  filterTodos,
+const CardFooter: FunctionComponent<Props> = ({
+  todosFilter,
   numberOfUncompletedTodos,
   handleFilterChange,
   clearAllCompleted,
@@ -39,17 +38,20 @@ const CardFooter: FunctionComponent<IProps> = ({
           </Card>
         </Grid>
         <Grid item xs={4}>
-          <FilterTodos
-            filterTodos={filterTodos}
+          <FilterTodosToggle
+            todosFilter={todosFilter}
             onChange={handleFilterChange}
           />
         </Grid>
         <Grid item xs={4}>
-          <ClearCompleted onClear={clearAllCompleted} />
+          {/* QUESTION: */}
+          {/* ClearCompletedButton will be rerendered every time todos array is changed, because onClear useCallback has to have todos in his deps array */}
+          {/* so is it worth it to use React.memo here? I'm not really sure */}
+          <ClearCompletedButton onClear={clearAllCompleted} />
         </Grid>
       </Grid>
     </CardActions>
   );
 };
 
-export default CardFooter;
+export default React.memo(CardFooter);

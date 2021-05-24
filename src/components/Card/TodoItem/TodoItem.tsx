@@ -9,18 +9,17 @@ import TextField from "@material-ui/core/TextField";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import React, { FunctionComponent, useState } from "react";
-import Todo from "../models/Todo";
-import "../styles/TodoItem.css";
+import Todo from "../../../models/Todo";
+import styles from "./TodoItem.module.css";
 
-interface IProps {
+interface Props {
   todo: Todo;
   onDelete: (todoToDeleteID: number) => void;
   onTodoUpdate: (todoToUpdate: Todo) => void;
   openTimeModal: (todo: Todo) => void;
 }
 
-// TODO: read about React.memo() and implement across the application (think wisely where it should be implemented and why it's not always recommended to use it)
-const TodoItem: FunctionComponent<IProps> = ({
+const TodoItem: FunctionComponent<Props> = ({
   todo,
   onDelete,
   onTodoUpdate,
@@ -42,9 +41,7 @@ const TodoItem: FunctionComponent<IProps> = ({
   };
 
   const handleTodoDelete = () => {
-    if (todo.id) {
-      onDelete(todo.id as number);
-    }
+    onDelete(todo.id);
   };
 
   const enableEdit = () => {
@@ -60,7 +57,7 @@ const TodoItem: FunctionComponent<IProps> = ({
 
   return (
     <ClickAwayListener onClickAway={handleClickOutside}>
-      <div className="todo-item">
+      <div className={styles.todoItem}>
         <ListItem dense button divider onDoubleClick={enableEdit}>
           <ListItemIcon>
             <Checkbox
@@ -83,7 +80,7 @@ const TodoItem: FunctionComponent<IProps> = ({
               primary={todo.text}
             />
           )}
-          <ListItemSecondaryAction className="secondary-buttons">
+          <ListItemSecondaryAction className={styles.secondaryButtons}>
             <IconButton
               edge="end"
               aria-label="time"
@@ -105,4 +102,4 @@ const TodoItem: FunctionComponent<IProps> = ({
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);

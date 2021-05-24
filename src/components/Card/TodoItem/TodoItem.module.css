@@ -1,0 +1,7 @@
+.todoItem:hover .secondaryButtons {
+  display: block;
+}
+
+.todoItem .secondaryButtons {
+  display: none;
+}
